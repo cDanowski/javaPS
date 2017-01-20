@@ -18,9 +18,10 @@ JavaPS Documentation - Adding new Processes/Algorithms
 How to add new Processes/Algorithms
 -----------------------------------
 
-This page explains how new custom processes can be added to **JavaPS**. As described in the [Architectural Details Page](../architecture/architecture.markdown), processes are implementations of the interface ***IAlgorithm***, which prescribes an *execute()* method and a ***TypedProcessDescription***, the Java representation of a process description. The abstract component ***AbstractALgorithm*** implements the interface. To add new ***Algorithms***, **JavaPS** offers two distinct ways. First, ***AbstractALgorithm*** can be extended and the required methods be implemented. Another possibility is to define an arbitrary Java class with arbitrary methods and use appropriate *Java annotations* to mark key methods as the required implementations. Subsequently, both options are demonstrated.
+This page explains how new custom processes can be added to **JavaPS**. As described in the [Architectural Details Page](../architecture/architecture.markdown), processes are implementations of the interface ***IAlgorithm***, which prescribes an *execute()* method and a ***TypedProcessDescription***, the Java representation of a process description. The abstract component ***AbstractAlgorithm*** implements the interface. To add new ***Algorithms***, **JavaPS** offers two distinct ways. First, ***AbstractAlgorithm*** can be extended and the required methods be implemented. Another possibility is to define an arbitrary Java class with arbitrary methods and use appropriate *Java annotations* to mark key methods as the required implementations. Subsequently, both options are demonstrated.
 
 ### Implementing the Algorithm Interface - Define Algorithms by extending ***AbstractAlgorithm***
+**TODO** if possible, provide example and explanation
 
 ### Annotated Algorithms - Define Algorithms based on Java Annotations
 
