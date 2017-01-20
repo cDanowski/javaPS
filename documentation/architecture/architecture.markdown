@@ -10,6 +10,8 @@ JavaPS Documentation - Architectural Details
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Architectural Details](#architectural-details)
+- [Overview of Maven Modules](#overview-of-maven-modules)
+- [Spring Bean Configuration](#spring-bean-configuration)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -40,5 +42,26 @@ As already explained, the generic infrastructure of **Iceland** is concretized t
 3.	**JavaPS** - ***WPS CLasses***: Additional **WPS** specific Java representations have to be provided within the scope of handling **WPS** operations. As exemplary components ***Requests*** and ***Responses*** are implemented and used within **Icelands** execution workflow. Of course, also the actual operation handling and job management within **JavaPS** requires several **WPS** specific Java classes. E.g., the following two components ***Engine*** and ***Service*** also make use of ***WPS Classes***.
 4.	**JavaPS** - ***Engine***: The ***Engine*** component implements the job and persistence management. In short it is responsible for planning and executing **WPS** processes/jobs and offer mechanisms to persist and retrieve computed results as well as general job information (e.g. **Job Status**). For instance, the ***Engine*** might use the local hard drive of the application server to persist job information within JSON files or complex output results as files of their own. A process is implemented as ***Algorithm*** and the available ***Algorithms*** are stored within ***AlgorithmRepositories***. Not only can ***Algorithms*** be implemented within **JavaPS** but can also be added via **external Processing/Algorithm Repositories**, that only offer additional ***Algorithm*** implementations.
 5.	**JavaPS** - ***Service***: The last main part of **JavaPS** is to provide implementations of ***OperationHandler*** and ***ValidationHandler*** to handle **WPS** requests. Hence, for each **WPS** operation (*GetCapabilities*, *DescribeProcess*, *Execute*, *GetStatus*, *GetResult*, *Dismiss*) , **JavaPS** implements one ***OperationHandler***. ***ValidationHandlers*** are required to check and validate each request. E.g. within some **WPS** operations, a parameter *jobId* has to be included that references an existing process/algorithm within **JavaPS**, otherwise an exception can be thrown. By offering the appropriate ***OperationHandler***, the responsibility of handling and answering **WPS** request is assigned to **JavaPS**. For most **WPS** requests, the ***OperationHandler*** make use of the ***Engine*** to perform actions related to a certain job (e.g. create and execute a new job or retrieve the results of finished jobs).
+
+Overview of Maven Modules
+-------------------------
+
+**JavaPS** and **Iceland** both use [Apache Maven](https://maven.apache.org/) as build automation tool to manage project dependencies and external libraries. **JavaPS** defines several sub-modules, each dedicated to a certain task. The following table shows each Maven module and its task:
+
+| Maven Module Name | Task                                                                                                                                            |
+|:-----------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------:|
+|       core        |                                           provides Java representations of WPS requests and responses                                           |
+|      engine       |                                      implements the necessary processing engine to execute and manage jobs                                      |
+|  iceland-stream   |                                                    provides (XML) stream readers and writers                                                    |
+|    iceland-wps    | provides elementary Java representations/implementations of all relevant WPS components defined within the official WPS 2.0 standard of the OGC |
+|        kvp        |                                  provides additional KVP decoders for each WPS 2.0 operations (except Execute)                                  |
+|      service      |                                      provides operation validators and handlers for each WPS 2.0 operation                                      |
+|        xml        |                            provides helper components for interacting with XML requests/responses of WPS operations                             |
+|      webapp       |                                                       provides deployment descriptor etc.                                                       |
+
+Spring Bean Configuration
+-------------------------
+
+Iceland is based on the [Spring Framework](https://spring.io/). By declaring certain Java classes as so-called *beans*, Spring's [dependency injection](https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html) mechanism can be used to automatically inject these beans into other components. **Iceland** and **JavaPS** make use of classic [XML configuration](https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html#beans-factory-metadata) files for bean declaration. For this reason, each Maven module of **JavaPS** comprises a number of *bean declaration XML files* that are located in *src/main/resources/components/*.
 
 [Jump back to main JavaPS documentation page](../JavaPS_Documentation.markdown)
