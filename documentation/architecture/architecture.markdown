@@ -6,10 +6,12 @@ JavaPS Documentation - Architectural Details
 #### Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Architectural Details](#architectural-details)
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+-	[Architectural Details](#architectural-details)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -18,7 +20,7 @@ Architectural Details
 
 **JavaPS** is based on another 52°North project named [Iceland](https://github.com/52North/iceland). The following UML diagram highlights the core architectural aspects. To be precise, it shows the main components of **Icelands** generic infrastructure that ensures equal handling of different OGC Web services. Furthermore, the diagram also explains, how **JavaPS** extends the generic **Iceland** infrastructure by offering several **WPS** specific components and Java implementations. For this reason, the notation of UML component diagrams is used. For clarification, the notation is explained in the following. On the left side, the three yellow boxes indicate the three tiers *client*, *server* and *data* of classical 3-Tier Web service architectures. While the *client* and *data* tier contain few elements, the core attention should be paid on the *server* tier. It illustrates that **Iceland** is the main component to handle client requests and manage the whole request lifecycle from receiving requests over determining appropriate request handlers until processing responses and return them to the client. For this reason, **Iceland** is split into several key components, as shown in the subsequent diagram. While the blue coloured infrastructure components are completely provided by **Iceland**, those coloured in cyan are implemented and offered by **JavaPS** to create a **WPS** specific application. For separation purposes the main components of **JavaPS** are coloured in red. Each components name is enclosed in "&lt;&lt; &gt;&gt;" to separate it from its description. Arrows within the diagram indicate that the connected resources work together. Where necessary, arrows are annotated to clarify their task.
 
-<figure><img src='UML_Diagrams/Architecture/architecture_deployment.png'><figcaption>System Architecture</figcaption></figure>
+![System Architecture](UML_Diagrams/Architecture/architecture_deployment.png)*System Architecture*
 
 Subsequently, the basic components and their interaction and dependencies are explained. First **Iceland** components are explained. Afterwards, special attention is paid to the additions provided by **JavaPS**.
 
