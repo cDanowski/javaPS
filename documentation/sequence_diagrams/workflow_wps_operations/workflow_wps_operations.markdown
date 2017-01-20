@@ -315,7 +315,7 @@ A **GetResult** operation is used to retrieve the *result(s)* of the *job* with 
 
 #### Request Validation
 
-Similar to the validation of a **GetStatus** request, the component ***JobIdParameterValidator*** performs validation of a **GetResult** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3).
+Similar to the validation of a **GetStatus** request, the component ***JobIdParameterValidator*** performs validation of a **GetResult** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3)\.
 
 ![GetResult Request Validation](UML_Diagrams/GetResult_GET/GetResult_validation.png)*GetResult Request Validation*
 
@@ -350,7 +350,7 @@ The **Dismiss** operation is used to cancel an *accepted* or *running* **job**. 
 
 #### Request Validation
 
-Similar to the validation of a **GetStatus** and *GetResult* request, the component ***JobIdParameterValidator*** performs validation of a **Dismiss** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3).
+Similar to the validation of a **GetStatus** and **GetResult** request, the component ***JobIdParameterValidator*** performs validation of a **Dismiss** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3)\.
 
 ![Dismiss Request Validation](UML_Diagrams/Dismiss_GET/Dismiss_validation.png)*Dismiss Request Validation*
 
