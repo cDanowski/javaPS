@@ -6,12 +6,10 @@ JavaPS Documentation - Sequence Diagrams
 #### Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
--	[Sequence Diagrams demonstrating dynamic Interaction](#sequence-diagrams-demonstrating-dynamic-interaction)
+- [Sequence Diagrams demonstrating dynamic Interaction](#sequence-diagrams-demonstrating-dynamic-interaction)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

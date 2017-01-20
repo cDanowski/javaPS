@@ -4,13 +4,11 @@ JavaPS Documentation
 #### Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
--	[General Information](#general-information)
--	[Links to Subpages of the Documentation](#links-to-subpages-of-the-documentation)
+- [General Information](#general-information)
+- [Links to Subpages of the Documentation](#links-to-subpages-of-the-documentation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
