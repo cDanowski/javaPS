@@ -12,21 +12,23 @@ Throughout all sequence diagrams the UML sequence diagram notation is used. In a
 #### Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [General Workflow (abstract Request to Response)](#general-workflow-abstract-request-to-response)
-  - [Overview from Request to Response](#overview-from-request-to-response)
-  - [Iceland Service Events throughout Operations](#iceland-service-events-throughout-operations)
-  - [Identification of Binding in detail](#identification-of-binding-in-detail)
-    - [Generic Workflow - Binding](#generic-workflow---binding)
-    - [KVP Binding Example for GET Request](#kvp-binding-example-for-get-request)
-    - [POX Binding Example for POST Request](#pox-binding-example-for-post-request)
-  - [Parsing of a Request in detail](#parsing-of-a-request-in-detail)
-    - [Generic Workflow - Parse Request](#generic-workflow---parse-request)
-    - [Capabilities GET Example](#capabilities-get-example)
-    - [Execute POST Example with POX Binding](#execute-post-example-with-pox-binding)
-  - [Identification of OperationHandler in detail](#identification-of-operationhandler-in-detail)
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+-	[General Workflow (abstract Request to Response)](#general-workflow-abstract-request-to-response)
+	-	[Overview from Request to Response](#overview-from-request-to-response)
+	-	[Iceland Service Events throughout Operations](#iceland-service-events-throughout-operations)
+	-	[Identification of Binding in detail](#identification-of-binding-in-detail)
+	-	[Generic Workflow - Binding](#generic-workflow---binding)
+	-	[KVP Binding Example for GET Request](#kvp-binding-example-for-get-request)
+	-	[POX Binding Example for POST Request](#pox-binding-example-for-post-request)
+	-	[Parsing of a Request in detail](#parsing-of-a-request-in-detail)
+	-	[Generic Workflow - Parse Request](#generic-workflow---parse-request)
+	-	[Capabilities GET Example](#capabilities-get-example)
+	-	[Execute POST Example with POX Binding](#execute-post-example-with-pox-binding)
+	-	[Identification of OperationHandler in detail](#identification-of-operationhandler-in-detail)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -41,7 +43,7 @@ Concrete operation workflows with particular focus on *request handling* are exp
 
 First a general overview is presented subsequently. It shows the main processing steps and participating components from *receiving a request* to *returning the response*.
 
-<figure><img src='UML_Diagrams/Generic_Workflow/Generic_Workflow.png'><figcaption>Generic Workflow</figcaption></figure>
+![Generic Workflow](UML_Diagrams/Generic_Workflow/Generic_Workflow.png)*Generic Workflow*
 
 As **JavaPS** / **Iceland** is build on Spring, the ***Service*** component acts as the central Spring controller, receiving any incoming request. For each WPS request its processing is structured in the following subtasks:
 
@@ -66,7 +68,7 @@ At several workflow points of the operation handling process described above, th
 3.	Once the **response** is generated, the ***GenericRequestOperator*** *submits* a ***ResponseEvent***, which is also specific for each WPS operation as it comprises a **response** property that contains the concrete *response object* (e.g. a ***GetCapabilitiesResponse*** for a GetCapabilities operation).
 4.	As soon as the **response** has been *written* and send to the client, the ***Service*** component *submits* the final ***OutgoingResponseEvent***.
 
-<figure><img src='UML_Diagrams/ServiceEventBus/ServiceEventBus_Generic_Workflow.png'><figcaption>Service Events</figcaption></figure>
+![Service Events](UML_Diagrams/ServiceEventBus/ServiceEventBus_Generic_Workflow.png)*Service Events*
 
 ### Identification of Binding in detail
 
@@ -85,7 +87,7 @@ As shown in the sequence diagram, the associated *getBinding()* method consists 
 
 However, the first step is not as simple as it sounds. There are multiple *if-cases* that have to be resolved, as illustrated in the diagram.
 
-<figure><img src='UML_Diagrams/Generic_Workflow/Binding/Get_Binding.png'><figcaption>Generic Workflow Binding</figcaption></figure>
+![Generic Workflow - Binding](UML_Diagrams/Generic_Workflow/Binding/Get_Binding.png)*Generic Workflow - Binding*
 
 In general, if the request is a **GET** request, then the content type is set to **application/x-kvp** indicating that any **GET** request is associated to a KVP (Key Value Pair) binding. If otherwise it is a POST request then a ***MediaType*** object is created from the *content type*.
 
@@ -95,13 +97,13 @@ To concretize this abstract description, two examples are illustrated below. Fir
 
 The following diagram is based on the abstract binding-diagram from the previous section but instantiates the participating components to a **GetCapabilities GET** request. As a consequence, the implementation of the ***Binding*** interface is resolved to ***KvpBinding*** to handle a **GET** request. Furthermore, the diagram uses green colour to show the path within the various if-statements.
 
-<figure><img src='UML_Diagrams/Generic_Workflow/Binding/Get_Binding_KVP.png'><figcaption>KVP Binding Example</figcaption></figure>
+![KVP Binding Example](UML_Diagrams/Generic_Workflow/Binding/Get_Binding_KVP.png)*KVP Binding Example*
 
 #### POX Binding Example for POST Request
 
 In contrast to a **GET** request, the workflow of a **POST** request differs. Again the green colour indicates the path within the if-statements. As it is a **POST** request using a **POX** (Plain Old XML) binding, the *content type* ("application/xml") is extracted from the request and used to identify the corresponding ***Binding*** implementation, which resolves to ***PoxBinding***.
 
-<figure><img src='UML_Diagrams/Generic_Workflow/Binding/Get_Binding_POX.png'><figcaption>POX Binding Example</figcaption></figure>
+![POX Binding Example](UML_Diagrams/Generic_Workflow/Binding/Get_Binding_POX.png)*POX Binding Example*
 
 ### Parsing of a Request in detail
 
@@ -117,7 +119,7 @@ Parsing of a request is executed by the ***Binding*** component. It analyses the
 4.	via the method *decode()* of the ***Decoder***, the request is transformed into the suitable instance of ***AbstractServiceRequest***. Note that **JavaPS** offers exactly one implementation of ***AbstractServiceRequest*** for each WPS request/operation.
 5.	after instantiation of the request object it can be processed.
 
-<figure><img src='UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic.png'><figcaption>Generic Workflow Get Request</figcaption></figure>
+![Generic Workflow - Parse Request](UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic.png)*Generic Workflow - Parse Request*
 
 The following two sub-sections demonstrate request parsing including a *GetCapabilities GET* and an *Execute POST* request.
 
@@ -125,7 +127,7 @@ The following two sub-sections demonstrate request parsing including a *GetCapab
 
 A **GetCapabilities GET** request is parsed by ***KvpBinding***. First the *parameter value map* is extracted from the request and used to acquire *service* ("wps"), *version* ("2.0.0"), *operation* ("GetCapabilities") and *content/media type* ("application/x-kvp"). With this information, the ***DecoderKey*** is created and used to retrieve the ***GetCapabilitiesKvpDecoder*** from the ***DecoderRepository***. Note that this decoder is specialized to handle *GetCapabilities GET* requests. Via its *decoder()* method, which receives the *parameter value map* as argument, a ***GetCapabilitiesRequest*** instance is created and returned.
 
-<figure><img src='UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic_capabilities_get.png'><figcaption>Capabilities GET Example</figcaption></figure>
+![Parse Request - Capabilities GET Example](UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic_capabilities_get.png)*Parse Request - Capabilities GET Example*
 
 #### Execute POST Example with POX Binding
 
@@ -133,7 +135,7 @@ An **Execute POST** request with *POX* binding is parsed by ***PoxBinding***. Si
 
 Then this decoder is used to read and parse the *Execute* request body String. **JavaPS** is designed to use *stream readers* to perform this task. It offers the interface ***StremReader*** and manages a repository of concrete child classes to parse the information from different formats. E.g. with regard to the XML body String of the request, an associated ***XmlStreamReaderKey*** is created to find the ***DocumentXmlStreamReader*** that extracts the required information from the XML String and creates an ***ExecuteRequest*** instance.
 
-<figure><img src='UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic_execute_post.png'><figcaption>Execute POST Example</figcaption></figure>
+![Parse Request - Execute POST Example](UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic_execute_post.png)*Parse Request - Execute POST Example*
 
 ### Identification of OperationHandler in detail
 

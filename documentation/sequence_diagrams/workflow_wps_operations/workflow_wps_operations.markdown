@@ -8,42 +8,44 @@ JavaPS Documentation - Workflow of WPS 2.0 Operations
 #### Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Workflow of WPS 2.0.0 Operations](#workflow-of-wps-200-operations)
-  - [GetCapabilities](#getcapabilities)
-    - [Basic Workflow](#basic-workflow)
-    - [Request Validation](#request-validation)
-    - [Detailed Request Handling](#detailed-request-handling)
-  - [DescribeProcess](#describeprocess)
-    - [Basic Workflow](#basic-workflow-1)
-    - [Request Validation](#request-validation-1)
-    - [Detailed Request Handling](#detailed-request-handling-1)
-  - [Execute](#execute)
-    - [Basic Workflow](#basic-workflow-2)
-    - [Request Validation](#request-validation-2)
-      - [Coarse Overview of Execute Request Validation](#coarse-overview-of-execute-request-validation)
-      - [Input Validation in detail](#input-validation-in-detail)
-        - [Group Input Validation](#group-input-validation)
-        - [Reference Input Validation](#reference-input-validation)
-        - [Value Input and Format Validation](#value-input-and-format-validation)
-      - [Output Validation in detail](#output-validation-in-detail)
-      - [Cardinality Validation in detail](#cardinality-validation-in-detail)
-    - [Detailed Request Handling](#detailed-request-handling-2)
-  - [GetStatus](#getstatus)
-    - [Basic Workflow](#basic-workflow-3)
-    - [Request Validation](#request-validation-3)
-    - [Detailed Request Handling](#detailed-request-handling-3)
-  - [GetResult](#getresult)
-    - [Basic Workflow](#basic-workflow-4)
-    - [Request Validation](#request-validation-4)
-    - [Detailed Request Handling](#detailed-request-handling-4)
-  - [Dismiss](#dismiss)
-    - [Basic Workflow](#basic-workflow-5)
-    - [Request Validation](#request-validation-5)
-    - [Detailed Request Handling](#detailed-request-handling-5)
-    - [Cancelling an accepted or running Job via Dismiss - an Example from the Developer Perspective](#cancelling-an-accepted-or-running-job-via-dismiss---an-example-from-the-developer-perspective)
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+-	[Workflow of WPS 2.0.0 Operations](#workflow-of-wps-200-operations)
+	-	[GetCapabilities](#getcapabilities)
+	-	[Basic Workflow](#basic-workflow)
+	-	[Request Validation](#request-validation)
+	-	[Detailed Request Handling](#detailed-request-handling)
+	-	[DescribeProcess](#describeprocess)
+	-	[Basic Workflow](#basic-workflow-1)
+	-	[Request Validation](#request-validation-1)
+	-	[Detailed Request Handling](#detailed-request-handling-1)
+	-	[Execute](#execute)
+	-	[Basic Workflow](#basic-workflow-2)
+	-	[Request Validation](#request-validation-2)
+		-	[Coarse Overview of Execute Request Validation](#coarse-overview-of-execute-request-validation)
+		-	[Input Validation in detail](#input-validation-in-detail)
+		-	[Group Input Validation](#group-input-validation)
+		-	[Reference Input Validation](#reference-input-validation)
+		-	[Value Input and Format Validation](#value-input-and-format-validation)
+		-	[Output Validation in detail](#output-validation-in-detail)
+		-	[Cardinality Validation in detail](#cardinality-validation-in-detail)
+	-	[Detailed Request Handling](#detailed-request-handling-2)
+	-	[GetStatus](#getstatus)
+	-	[Basic Workflow](#basic-workflow-3)
+	-	[Request Validation](#request-validation-3)
+	-	[Detailed Request Handling](#detailed-request-handling-3)
+	-	[GetResult](#getresult)
+	-	[Basic Workflow](#basic-workflow-4)
+	-	[Request Validation](#request-validation-4)
+	-	[Detailed Request Handling](#detailed-request-handling-4)
+	-	[Dismiss](#dismiss)
+	-	[Basic Workflow](#basic-workflow-5)
+	-	[Request Validation](#request-validation-5)
+	-	[Detailed Request Handling](#detailed-request-handling-5)
+	-	[Cancelling an accepted or running Job via Dismiss - an Example from the Developer Perspective](#cancelling-an-accepted-or-running-job-via-dismiss---an-example-from-the-developer-perspective)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -60,7 +62,7 @@ Throughout all sequence diagrams the UML sequence diagram notation is used. In a
 
 Within the **GetCapabilities** operation the service capabilities of the WPS instance are retrieved. The subsequent diagram shows the coarse workflow between the participating system components for a **GetCapabilities GET** request. **JavaPS** uses ***KvpBinding*** to parse the request as a ***GetCapabilitiesRequest***, validates the request with the help of ***GetCapabilitiesParameterValidator*** and request handling is done by ***GetCapabilitiesHandler***. The latter returns a ***GetCapabilitiesResponse*** object including the retrieved capabilities.
 
-<figure><img src='UML_Diagrams/GetCapabilities_GET/GetCapabilities_coarse.png'><figcaption>GetCapabilities Workflow coarse</figcaption></figure>
+![GetCapabilities Workflow coarse](UML_Diagrams/GetCapabilities_GET/GetCapabilities_coarse.png)*GetCapabilities Workflow coarse*
 
 #### Request Validation
 
@@ -83,7 +85,7 @@ The main tasks of the *GetCapabilities* request handling are:
 4.	as **Iceland** is a generic abstract framework for arbitrary OGC Web services it offers the component ***OwsCapabilities*** to include common **Capabilities** information. Hence n instance of ***OwsCapabilities*** is created from all requested section objects except the WPS specific *ProcessOfferings*.
 5.	finally, a new instance of ***WPSCapabilities*** is created from *OwsCapabilities* and *ProcessOfferings*, which is set within the ***GetCapabilitiesResponse*** and returned.
 
-<figure><img src='UML_Diagrams/GetCapabilities_GET/GetCapabilities_handleRequest.png'><figcaption>GetCapabilities Workflow handleRequest detailed</figcaption></figure>
+![GetCapabilities Workflow - handleRequest detailed](UML_Diagrams/GetCapabilities_GET/GetCapabilities_handleRequest.png)*GetCapabilities Workflow - handleRequest detailed*
 
 ### DescribeProcess
 
@@ -91,13 +93,13 @@ The main tasks of the *GetCapabilities* request handling are:
 
 The **DescribeProcess** Operation is used by clients to retrieve the *process description* of a certain WPS process. The subsequent diagram shows the coarse workflow between the participating system components for a **DescribeProcess GET** request. **JavaPS** uses ***KvpBinding*** to parse the request as a ***DescribeProcessRequest***, validates the request with the help of ***DescribeProcessParameterValidator*** and request handling is done by ***DescribeProcessHandler***. The latter returns a ***DescribeProcessResponse*** object including the requested *process description*.
 
-<figure><img src='UML_Diagrams/DescribeProcess_GET/DescribeProcess_coarse.png'><figcaption>DescribeProcess Workflow coarse</figcaption></figure>
+![DescribeProcess Workflow coarse](UML_Diagrams/DescribeProcess_GET/DescribeProcess_coarse.png)*DescribeProcess Workflow coarse*
 
 #### Request Validation
 
 Validation of a **DescribeProcess** request is done by ***DescribeProcessParameterValidator*** and visualized in the diagram at the end of this section. Basically, a request has to contain the parameter *"identifier"*. Its value might be a reference to a single identifier of the associated process or a list of references to multiple processes or it may be the word *"ALL"* to request all process descriptions from the WPS. Hence, during validation, the ***DescribeProcessRequest*** object is analyzed for the existence of the required parameter. If it does not exist or is an empty value, a ***MissingParameterValueException*** is immediately thrown. Otherwise, each individual parameter value has to be checked. Before that an empty ***CompositeOwsException*** is created, which is used to collect any *exception* that might occur when checking each *identifier value*. Validating a single *identifier value* is split in two checks. First, if the *identifier value* is a *NULL* object, then a ***MissingParameterValueException*** is added to ***CompositeOwsException***. Second, the *parameter value* must reference an existing *process* within the WPS instance. To verify this, the ***Engine*** component is asked whether it contains an associated *process description*. If not, an ***InvalidParameterValueException*** is added to ***CompositeOwsException***. Finally, as soon as each identifier has been checked, the ***CompositeOwsException*** object is analyzed. If it contains any *exception*, it is thrown as the request contained invalid or missing parameter values. If it empty, then validation was successful and the actual operation handling can be continued.
 
-<figure><img src='UML_Diagrams/DescribeProcess_GET/DescribeProcess_validation.png'><figcaption>DescribeProcess Request Validation</figcaption></figure>
+![DescribeProcess Request Validation](UML_Diagrams/DescribeProcess_GET/DescribeProcess_validation.png)*DescribeProcess Request Validation*
 
 As indicated by the notes within the diagram, the upper description of the validation process have been simplified. Actually, Java Lambda expressions and ***Optional*** objects are used when creating an ***Exception*** first that are afterwards investigated to transfer any ***Exception*** to ***CompositeOwsException***. For reasons of simplicity, the sequence diagram displays these steps in a different way.
 
@@ -112,15 +114,15 @@ In more detail, the following tasks are performed:
 3.	an instance of ***ProcessOffering*** is created using the ***ProcessDescription*** as parameter.
 4.	eventually a ***DescribeProcessResponse*** object is created from *service* ("WPS") and *version* (e.g. "2.0.0") and the ***ProcessOffering*** and returned.
 
-<figure><img src='UML_Diagrams/DescribeProcess_GET/DescribeProcess_handleRequest.png'><figcaption>DescribeProcess handleRequest detailed</figcaption></figure>
+![DescribeProcess - handleRequest detailed](UML_Diagrams/DescribeProcess_GET/DescribeProcess_handleRequest.png)*DescribeProcess - handleRequest detailed*
 
 ### Execute
 
 #### Basic Workflow
 
-I contrast to the previous WPS *GET* operations examples, the **Execute** operation is demonstrated using HTTP *POST* and *POX* binding. With regard to the coarse workflow, the ***PoxBinding*** component parses the request as ***ExecuteRequest*** within the *doPostOperation()* method. The request is validated by ***ExecuteParameterValidator***, which performs a lot more checks compared to all other WPS operations as explained below. After validation, the ***ExecuteHandler*** processes the request and returns an ***ExecuteResponse***. In short, a new ***Job*** instance is created that is executed synchronously or asynchronously. While in the first case (synchronous execution), the response contains the computed *result(s)*, the latter case includes a *status info* document within the response.
+In contrast to the previous WPS *GET* operations examples, the **Execute** operation is demonstrated using HTTP *POST* and *POX* binding. With regard to the coarse workflow, the ***PoxBinding*** component parses the request as ***ExecuteRequest*** within the *doPostOperation()* method. The request is validated by ***ExecuteParameterValidator***, which performs a lot more checks compared to all other WPS operations as explained below. After validation, the ***ExecuteHandler*** processes the request and returns an ***ExecuteResponse***. In short, a new ***Job*** instance is created that is executed synchronously or asynchronously. While in the first case (synchronous execution), the response contains the computed *result(s)*, the latter case includes a *status info* document within the response.
 
-<figure><img src='UML_Diagrams/Execute_POST/Execute_coarse.png'><figcaption>Execute Workflow coarse</figcaption></figure>
+![Execute Workflow coarse](UML_Diagrams/Execute_POST/Execute_coarse.png)*Execute Workflow coarse*
 
 #### Request Validation
 
@@ -158,7 +160,7 @@ Last, the *cardinalities* of in- and outputs analysed, which is highlighted in s
 
 If any ***Exception*** has been created during the validation process (due to incorrect request parameters), it is collected within ***CompositeOwsException*** instances. Should they contain any ***Exception***, they are ultimately thrown and validation fails. Otherwise (no error/exception occurred), validation succeeds and the actual processing of the ***ExecuteRequest*** may continue.
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_coarse.png'><figcaption>Execute Request Validation</figcaption></figure>
+![Execute Request Validation](UML_Diagrams/Execute_POST/validation/Execute_validation_coarse.png)*Execute Request Validation*
 
 ##### Input Validation in detail
 
@@ -172,31 +174,31 @@ An **Execute** *input* can be of three types, **value input** (value is directly
 
 Finally, the ***CompositeOwsException*** is inspected for any containing ***Exceptions*** that have to be thrown.
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_input_detailed.png'><figcaption>Execute Request Input Validation</figcaption></figure>
+![Execute Request - Input Validation](UML_Diagrams/Execute_POST/validation/Execute_validation_input_detailed.png)*Execute Request - Input Validation*
 
 ###### Group Input Validation
 
 In the following, the validation of a **group input** within the method *validateInputs()* of ***ExecuteParameterValidator*** is focused. A **group input** comprises multiple nested *input* definitions. Hence, the ***ProcessData*** is processed as ***GroupProcessData*** and also the ***ProcessInputDescription*** has to be the description of a **group input**, which is checked by calling its method *isGroup()*. If that is false (input is group but description is not), then an ***InvalidParameterValueException*** for the input is added to ***CompositeOwsException***. Otherwise, the *list of nested inputs* is fetched from ***GroupProcessData*** and the ***ProcessInputDescription*** is turned into a ***GroupInputDescription*** via *asGroup()*. Next, the method *validateInputs()* of ***ExecuteParameterValidator*** is re-called with the *list of nested **ProcessData** inputs* and the ***GroupInputDescription*** as parameters. Again, each nested input may be of type **value input**, **reference input** or **group input**. Validation of the first two are described below.
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_input_group_detailed.png'><figcaption>Execute Request Validation of Input as Group</figcaption></figure>
+![Execute Request - Validation of Input as Group](UML_Diagrams/Execute_POST/validation/Execute_validation_input_group_detailed.png)*Execute Request - Validation of Input as Group*
 
 ###### Reference Input Validation
 
 Subsequently, the validation of a **reference input** is demonstrated. The input should contain a *URI* to the resource containing the actual value and specify a valid *format* for its value. The ***ProcessData*** input is thus interpreted as ***ReferenceProcessData***. Within the *validateInput()* method a new ***CompositeOwsException*** is created to collect possible ***Exceptions***. Next, the *URI* is extracted from ***ReferenceProcessData*** via *getURI()*. If it is equal to **NULL**, an ***InvalidParameterValueException*** is added to ***CompositeOwsException***. Otherwise the specified *format* has to be validated within *validateFormat()*. As this comprises multiple sub-tasks, it is described together with the validation of **Value Inputs** below. After that, if ***CompositeOwsException*** contains any ***Exceptions***, then is is thrown.
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_input_reference_detailed.png'><figcaption>Execute Request Validation of Input as Reference</figcaption></figure>
+![Execute Request - Validation of Input as Reference](UML_Diagrams/Execute_POST/validation/Execute_validation_input_reference_detailed.png)*Execute Request - Validation of Input as Reference*
 
 ###### Value Input and Format Validation
 
 Here, the ***ProcessData*** input is treated as a ***ValueProcessData*** that directly contains the input value. The only validation required is the validation of the input *format* within the method *validateFormat()*. The remaining steps are equal to **group inputs** or **referenceInputs** and are omitted here.
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_input_value_detailed.png'><figcaption>Execute Request Validation of Input as Value</figcaption></figure>
+![Execute Request - Validation of Input as Value](UML_Diagrams/Execute_POST/validation/Execute_validation_input_value_detailed.png)*Execute Request - Validation of Input as Value*
 
 The following diagram finally presents the validation of the input *format*. Again, at the top of the diagram, some necessary steps from previous validation steps are included to show the context of the *validateFormat()* method. However the description of these tasks is omitted here as it was already described before.
 
 The explanation focuses the tasks of the *validateFormat()* method. First, the ***Format*** is fetched from ***ProcessData*** input. Two checks have to be performed to confirm validity of the ***Format***. First, it must not be *empty()* and second, its value must **match a supported format** of the selected process. To verify the latter, a new instance of ***InputFormatValidator*** is created using the ***ProcessData*** as parameter. As an input may be of type **literal**, **complex**, **bounding box** or **group**, it offers associated *visit()* methods that take the ***ProcessInputDescription*** as parameter to compare the Execute request input to its formal definition/description. Next, the method *visit()* of ***ProcessInputDescription*** is called with the ***InputFormatValidator*** as parameter. Depending on the input type it delegates the validation to the appropriate *visit()* method of ***InputFormatValidator***. There, all allowed/accepted formats for the current ***ProcessData*** input are retrieved and compared to the ***Format*** of the investigated input. If there is no match, the format specified by the Execute input is not accepted and hence an ***InvalidParameterValueException*** is added to ***CompositeOwsException***. Otherwise, the input ***Format*** is successfully validated.
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_input_validateFormat_detailed.png'><figcaption>Execute Request Validation of Input Format</figcaption></figure>
+![Execute Request - Validation of Input Format](UML_Diagrams/Execute_POST/validation/Execute_validation_input_validateFormat_detailed.png)*Execute Request - Validation of Input Format*
 
 ##### Output Validation in detail
 
@@ -206,7 +208,7 @@ First, a new instance of ***CompositeOwsException*** is created to collect later
 
 Afterwards, each ***OutputDefinitions*** is validated individually. Its *output identifier* is used to retrieve the associated ***ProcessOutputDescription*** from ***ProcessDescription***. If no such description can be found then the requested output does not exist and an ***InvalidParameterValueException*** is added to ***CompositeOwsException***. In general, an ***OutputDefinition*** may be a **group output** containing nested ***OutputDefinitions*** or a single ***OutputDefinition***. If it is a **group input** then the whole validation process has to be redone for the nested outputs by re-calling *validateOutputs()* with the nested ***OutputDefinitions*** and the description as parameters. Otherwise, the single ***OutputDefinition*** is validated through verification of a matching ***Format***. As the process of validating an output ***Format*** is more or less identical to the validation of an input ***Format*** the description is omitted here. It was already described in the final paragraphs of section [Input Validation in detail](#input-validation-in-detail).
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_output_detailed.png'><figcaption>Execute Request Output Validation</figcaption></figure>
+![Execute Request - Output Validation](UML_Diagrams/Execute_POST/validation/Execute_validation_output_detailed.png)*Execute Request - Output Validation*
 
 ##### Cardinality Validation in detail
 
@@ -227,7 +229,7 @@ As final validation, the code iterates over each entry of ***Occurrences*** in o
 
 If any ***Exception*** has been added to ***CompositeOwsException*** during the validation process it is thrown. Otherwise validation succeeded with no errors.
 
-<figure><img src='UML_Diagrams/Execute_POST/validation/Execute_validation_cardinalities_detailed.png'><figcaption>Execute Request Validation of Input Cardinalities</figcaption></figure>
+![Execute Request - Validation of Input Cardinalities](UML_Diagrams/Execute_POST/validation/Execute_validation_cardinalities_detailed.png)*Execute Request - Validation of Input Cardinalities*
 
 #### Detailed Request Handling
 
@@ -246,7 +248,7 @@ To concretize the handling and processing of an ***ExecuteRequest***, the *handl
 	-	case **sync**: in short, the processing waits for the ***Job*** to complete and retrieves the ***Result*** object that includes all computed *outputs* to return them along with the ***ExecutionResponse***. If in addition the parameter *response mode* is set to **raw**, then only one *output* is extracted from the ***Result*** as instance of ***ProcessData***. From this ***ProcessData*** *output* the *content/media type* is extracted and set within the ***ExecuteResponse***, which is then returned.
 	-	case **async**: in contrast to the previous case, **JavaPS** does not wait for the ***Job*** execution to complete. Instead, only the *status* of the ***Job*** is fetched via the *getStatus()* method. It uses the parameter *job identifier* to locate the ***Job***, from which its *status* is retrieved as ***StatusInfo***. Afterwards the ***StatusInfo*** is embedded within the ***ExecuteResponse*** and returned.
 
-<figure><img src='UML_Diagrams/Execute_POST/Execute_handleRequest.png'><figcaption>Execute Workflow handleRequest detailed</figcaption></figure>
+![Execute Workflow - handleRequest detailed](UML_Diagrams/Execute_POST/Execute_handleRequest.png)*Execute Workflow - handleRequest detailed*
 
 To complete the description of the **Execute** operation, the next diagram focuses the execution of a ***Job***. In the previous diagram, this step was simplified and only showed that a ***Job*** instance was created, whose execution produces a ***Result*** object containing all requested *outputs* as ***ProcessData***. Hence, a more detailed description of the necessary processing steps is given below:
 
@@ -260,7 +262,7 @@ To complete the description of the **Execute** operation, the next diagram focus
 8.	the ***Engine*** removes the ***Job*** from its class property maps **cancelers** and **jobs** and retrieves the persisted ***Result*** from ***ResultPersistence*** to return it to the ***Job***.
 9.	the ***Job*** sets the ***Result*** and executes any *listeners* that are registered for the event.
 
-<figure><img src='UML_Diagrams/Execute_POST/Execute_handleRequest_jobExecutionDetailed.png'><figcaption>Execute Workflow job execution detailed</figcaption></figure>
+![Execute Workflow - Job Execution detailed](UML_Diagrams/Execute_POST/Execute_handleRequest_jobExecutionDetailed.png)*Execute Workflow - Job Execution detailed*
 
 ### GetStatus
 
@@ -268,7 +270,7 @@ To complete the description of the **Execute** operation, the next diagram focus
 
 The aim of the **GetStatus** operation is to retrieve the current *status* of the *job* with the submitted *job identifier*. The following coarse workflow diagram shows an exemplar **GetStatus GET** request. The request is parsed by ***KvpBinding*** as a ***GetStatusRequest***. Validation is performed by ***JobIdParameterValidator***, which checks whether a parameter named *jobId* exists whose value can be resolved to an existing *job identifier* within the WPS. Subsequently, the ***GetStatusHandler*** performs the actual request handling to retrieve the current *job status* and return it within a ***GetStatusResponse***.
 
-<figure><img src='UML_Diagrams/GetStatus_GET/GetStatus_coarse.png'><figcaption>GetStatus Workflow coarse</figcaption></figure>
+![GetStatus Workflow coarse](UML_Diagrams/GetStatus_GET/GetStatus_coarse.png)*GetStatus Workflow coarse*
 
 #### Request Validation
 
@@ -280,7 +282,7 @@ As indicated in the lower diagram, the component ***JobIdParameterValidator*** p
 
 If any of these conditions is *true*, then a ***MissingParameterValueException*** is thrown, as the request does not specify a *jobId* parameter value at all. Otherwise, the *jobId* value specified within the request object is checked for validity. In particular, the ***Engine*** is asked whether it contains a ***Job*** instance associated to the *jobId*. If not, an ***InvalidParameterValueException*** is thrown. When not exception was thrown, then the *jobId* does point to an existing ***Job*** and validation was successful.
 
-<figure><img src='UML_Diagrams/GetStatus_GET/GetStatus_validation.png'><figcaption>GetStatus Request Validation</figcaption></figure>
+![GetStatus Request Validation](UML_Diagrams/GetStatus_GET/GetStatus_validation.png)*GetStatus Request Validation*
 
 #### Detailed Request Handling
 
@@ -303,7 +305,7 @@ The details of the *handle()* method of the ***GetStatusHandler*** are demonstra
 
 3.	A new ***GetStatusResponse*** is created using *service*, *version* and the retrieved *statusInfo* as parameters. This response object is then returned.
 
-<figure><img src='UML_Diagrams/GetStatus_GET/GetStatus_handleRequest.png'><figcaption>GetStatus handleRequest detailed</figcaption></figure>
+![GetStatus - handleRequest detailed](UML_Diagrams/GetStatus_GET/GetStatus_handleRequest.png)*GetStatus - handleRequest detailed*
 
 ### GetResult
 
@@ -311,13 +313,13 @@ The details of the *handle()* method of the ***GetStatusHandler*** are demonstra
 
 A **GetResult** operation is used to retrieve the *result(s)* of the *job* with the submitted *job identifier*. The following coarse workflow diagram shows an exemplar **GetResult GET** request. The request is parsed by ***KvpBinding*** as a ***GetResultRequest*** and validation is performed by ***JobIdParameterValidator***, which checks whether the parameter *jobId* points to an existing *job identifier* within the WPS. If so, the ***GetResultHandler*** performs the actual request handling and returns the requested *output(s)/result(s)* within a ***GetResultResponse***.
 
-<figure><img src='UML_Diagrams/GetResult_GET/GetResult_coarse.png'><figcaption>GetResult Workflow coarse</figcaption></figure>
+![GetResult Workflow coarse](UML_Diagrams/GetResult_GET/GetResult_coarse.png)*GetResult Workflow coarse*
 
 #### Request Validation
 
 Similar to the validation of a **GetStatus** request, the component ***JobIdParameterValidator*** performs validation of a **GetResult** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3).
 
-<figure><img src='UML_Diagrams/GetResult_GET/GetResult_validation.png'><figcaption>GetResult Request Validation</figcaption></figure>
+![GetResult Request Validation](UML_Diagrams/GetResult_GET/GetResult_validation.png)*GetResult Request Validation*
 
 #### Detailed Request Handling
 
@@ -338,7 +340,7 @@ Similar to the previous operation descriptions, the following diagram focuses th
 
 3.	***GetResultHandler*** creates a new instance of ***GetResultResponse*** using *service*, *version* and *result* as parameters and returns it.
 
-<figure><img src='UML_Diagrams/GetResult_GET/GetResult_handleRequest.png'><figcaption>GetResult handleRequest detailed</figcaption></figure>
+![GetResult - handleRequest detailed](UML_Diagrams/GetResult_GET/GetResult_handleRequest.png)*GetResult - handleRequest detailed*
 
 ### Dismiss
 
@@ -346,13 +348,13 @@ Similar to the previous operation descriptions, the following diagram focuses th
 
 The **Dismiss** operation is used to cancel an *accepted* or *running* **job**. A **Dismiss** GET request is parsed by ***KvpBinding*** as a ***DismissRequest***. Validation is performed by ***JobIdParameterValidator*** that checks whether a parameter named *jobId* exists and whether its value can be resolved to an existing *job identifier* within the WPS. Subsequently, the ***DismissHandler*** processes the request to cancel the specified job if possible and returns a ***DismissResponse***, which includes the jobs *Status Info* document.
 
-<figure><img src='UML_Diagrams/Dismiss_GET/Dismiss_coarse.png'><figcaption>Dismiss Workflow coarse</figcaption></figure>
+![Dismiss Workflow coarse](UML_Diagrams/Dismiss_GET/Dismiss_coarse.png)*Dismiss Workflow coarse*
 
 #### Request Validation
 
 Similar to the validation of a **GetStatus** and *GetResult* request, the component ***JobIdParameterValidator*** performs validation of a **Dismiss** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3).
 
-<figure><img src='UML_Diagrams/Dismiss_GET/Dismiss_validation.png'><figcaption>Dismiss Request Validation</figcaption></figure>
+![Dismiss Request Validation](UML_Diagrams/Dismiss_GET/Dismiss_validation.png)*Dismiss Request Validation*
 
 #### Detailed Request Handling
 
@@ -364,7 +366,7 @@ Again, more detailed information about the sub-tasks within the *handle()* metho
 4.	the *JobStatus* of the ***Job*** instance with identifier *jobId* is retrieved and forwarded to the ***DismissHandler***.
 5.	finally, a new ***DismissResponse*** instance is created from *service* ("WPS"), *version* (e.g. "2.0.0") and ***JobStatus***. Hence the response object contains the *status info* document of the dismissed job.
 
-<figure><img src='UML_Diagrams/Dismiss_GET/Dismiss_handleRequest.png'><figcaption>Dismiss handleRequest detailed</figcaption></figure>
+![Dismiss - handleRequest detailed](UML_Diagrams/Dismiss_GET/Dismiss_handleRequest.png)*Dismiss - handleRequest detailed*
 
 #### Cancelling an accepted or running Job via Dismiss - an Example from the Developer Perspective
 
