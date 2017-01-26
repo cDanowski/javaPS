@@ -27,5 +27,5 @@ Links to Subpages of the Documentation
 Within this documentation, several aspects of the implementation are addressed. The documentation is split across the following sub pages, each focusing a certain aspect:
 
 -	notes on architectural aspects are presented within page [Architectural Details](./architecture/architecture.markdown)
--	the dynamic interplay **Iceland's** and **JavaPS's** components is focused on page [Sequence Diagrams](./sequence_diagrams/sequence_diagrams.markdown). Is makes use of UML sequence diagrams to show the method calls from receiving a WPS request to sending the response.
+-	the dynamic interplay of **Iceland's** and **JavaPS's** components is focused on page [Sequence Diagrams](./sequence_diagrams/sequence_diagrams.markdown). Is makes use of UML sequence diagrams to show the method calls from receiving a WPS request to sending the response.
 -	recommendations and explanations on how to add custom processes (as executable algorithms) to **JavaPS** are provided on page [How to add new Processes/Algorithms](./algorithm_definition/algorithm_definition.markdown).
