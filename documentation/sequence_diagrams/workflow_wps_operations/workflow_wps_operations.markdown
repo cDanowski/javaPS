@@ -130,7 +130,7 @@ Validation of an **Execute** requires much more steps compared to all other WPS 
 -	*input*: one or more input definitions as process inputs. Hereby, inputs may be mandatory or optional and their cardinality (minimum and maximum occurrences) may be different. Also an input is defined using a certain format. The input value can be specified directly or might be given as a reference to a resource that must be fetched by the WPS first.
 -	*output*: one or more output definitions as process outputs. Similar to the input definition, outputs may be mandatory or optional, uses a certain format and can be offered as value or as reference (URL to external resource).
 -	*mode*: the execution mode, whose value indicates *synchronous* or *asynchronous* process execution.
--	*response* = the response format, whose value indicates whether outputs shall be encoded as formal *response document* or as *raw output*.
+-	*response*: the response format, whose value indicates whether outputs shall be encoded as formal *response document* or as *raw output*.
 
 In short, the validation of an **Execute** request comprises the following checks:
 
