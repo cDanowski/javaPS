@@ -162,7 +162,7 @@ If any ***Exception*** has been created during the validation process (due to in
 
 ##### Input Validation in detail
 
-In this section the validation of the *inputs* withinan ***ExecuteRequest*** is described as depicted in the following diagram. While the diagram repeats some general validation steps related to *inputs*, other steps are completely omitted.
+In this section the validation of the *inputs* within an ***ExecuteRequest*** is described as depicted in the following diagram. While the diagram repeats some general validation steps related to *inputs*, other steps are completely omitted.
 
 With regard to *input* validation, the ***ProcessDescription*** as well as the *inputs* (where each input is represented by a single Java component ***ProcessData***) are required. The *validateInputs()* method takes both as arguments and first creates a ***CompositeOwsException*** to collect possible ***InvalidParameterValueExceptions***.
 
