@@ -70,7 +70,7 @@ At several workflow points of the operation handling process described above, th
 
 ### Identification of Binding in detail
 
-Details on how the application determines the *binding* from the request are described in the following. First An abstract generic workflow description is presented followed by two concrete examples ([KVP Binding Example - GetCapabilities GET Request](#kvp-binding-example-for-get-request) and [POX Binding Example - Execute POST Request](#pox-binding-example-for-post-request)\).
+Details on how the application determines the *binding* from the request are described in the following. First, an abstract generic workflow description is presented followed by two concrete examples ([KVP Binding Example - GetCapabilities GET Request](#kvp-binding-example-for-get-request) and [POX Binding Example - Execute POST Request](#pox-binding-example-for-post-request)\).
 
 #### Generic Workflow - Binding
 
