@@ -49,7 +49,7 @@ As **JavaPS** / **Iceland** is build on Spring, the ***Service*** component acts
 2.	call the *doXOperation()* method from the found ***Binding*** component. Here the *X* indicates that different ***Binding*** implementations use different *do*-operations. E.g. a GET request is usually handled by a ***KvpBinding*** component, which offers a *doGetOperation()* method. Opposite a POST request is handled by a ***Binding*** implementation that has a *doPostOperation()* method.
 3.	the request is *parsed* and transformed into the associated ***Request*** object. The request *parsing* is explained in section [Parsing of a Request in detail](#parsing-of-a-request-in-detail).
 4.	determine the *service operator* that *receives* the request. **Iceland** offers a ***GenericServiceOperator*** component, which is used for all possible WPS requests. Hence the implementation is kept generic at this point.
-5.	within the *receiveRequest()* method, the generic *service operator* fetches an appropriate *request operator*. Again **Iceland** offers a generic implementation named ***GenericRequestOperator*** that can handle all types of WPS requests. However, as each request requires a different processing from this point onwards, the generic *request operator* is instantiated with request specific properties.
+5.	within the *receiveRequest()* method, the generic *service operator* fetches an appropriate *request operator*. Again **Iceland** offers a generic implementation named ***GenericRequestOperator*** that can handle all types of WPS requests. However, as each request requires a different processing from this point onwards, the generic *request operator* is instantiated with request specific properties. For instance a ***RequestOperatorKey*** property stores the parameters *service*, *version* and *operation name* of an incoming request. Based on these properties, ***GenericRequestOperator*** is able to determine, which concrete other components are required during the next processing steps described below.
 6.	as next step, the request needs to be *validated* by the request specific implementation of ***ParameterValidator***, e.g. by performing sanity checks on the delivered parameters or by checking certain values of request parameters. If a request parameter is missing or a non-existent resource is requested, an exception will be thrown. Relying on its request specific properties, the ***GenericRequestOperator*** knows, which validating component is responsible for this task. Note that the actual implementation of ***ParameterValidator*** is located within **JavaPS**! The section [Workflow of WPS 2.0 operations](../workflow_wps_operations/workflow_wps_operations.markdown) contains detailed sequence diagrams of the validation process for each **WPS** operation.
 7.	after successful validation the appropriate *operation handler* is fetched from the ***OperationHandlerRepository***. For each WPS request/operation (*GetCapabilities*, *DescribeProcess*, *Execute*, *GetStatus*, *GetResult*, *Dismiss*), exactly one implementation of the interface ***OperationHandler*** exists. Each comprises a *handle()* method to perform operation-specific processing steps. The section [Identification of Binding in detail](#identification-of-binding-in-detail) describes how Iceland fetches the appropriate ***OperationHandler***.
 8.	the ***OperationHandler*** implementation performs the necessary steps to process the request and eventually creates a request/operation specific ***Response*** object. Note that the processing steps of each different request greatly vary. Detailed sequence diagrams of the *request handling* of each **WPS operation** are included in section [Workflow of WPS 2.0 operations](../workflow_wps_operations/workflow_wps_operations.markdown).
@@ -137,7 +137,32 @@ Then this decoder is used to read and parse the *Execute* request body String. *
 
 ### Identification of OperationHandler in detail
 
-**TODO** create sequence diagram and write explanation...
+Another interesting aspect of **Iceland's** generic infrastructure is the *identification of a suitable **OperationHandler***, which processes a certain type of requests. As described in section [Overview from Request to Response](#overview-from-request-to-response), the ***GenericRequestOperator*** possesses certain request-specific properties that aid during this step. In particular, it includes a property *requestOperatorKey* of type ***RequestOperatorKey*** storing information about *service*, *version* and *operation name* of an incoming request. The diagram at the end of this section illustrates, how this information is used in order to fetch the correct ***OperationHandler*** from the associated ***OperationHandlerRepository***. It comprises the following steps:
+
+-	Within its *receiveRequest(request)* method the ***GenericRequestOperator*** delegates the task of fetching the ***OperationHandler*** to its internal methods *getOperationHander()* and *getOptionalOperationHandler()*. The latter first retrieves the instance of ***OperationHandler*** as an ***Optional*** object to throw an exception in case no suitable handler is identified (as described in point **TODO XXXXXX**).
+-	From the aforementioned ***RequestOperatorKey***, the request parameters *service* and *operationName* are extracted. While *service* always has to be set to **"WPS"** and is thus a constant value for all WPS request within the scope of **JavaPS** as a Web Processing Service implementation, the parameter *operationName* carries the operation the client targets. Possible Values are the operation specified in the [OGC WPS 2.0 specification](http://docs.opengeospatial.org/is/14-065/14-065.html), i.e. **GetCapabilities**, **DescribeProcess**, **Execute**, **GetStatus**, **GetResult**, **Dismiss**.
+-	*service* and *version* are then used as parameters when calling the *getOperationHander(service, operationName)* method of ***OperationHandlerRepository***.
+-	Amongst others, ***OperationHandlerRepository*** comprises a `Map<OperationHandlerKey,Producer<OperationHandler>> operationHandlers` property that maps an unambiguous ***OperationHandlerKey*** to its associated ***OperationHandler***. The latter is wrapped by a ***Producer***. In order to determine the correct ***OperationHandler***, a new instance of ***OperationHandlerKey*** is created from both request parameters *service* and *operationName* and used to retrieve the associated ***Producer<OperationHandler>*** from the `Map` object. In case of an invalid combination of *service* and *operationName*, then no handler is found at all. The following table shows the possible combinations and to which handler they are resolved:
+
+<div align='center'>
+
+| service | operationName   | OperationHandler instance |
+|:-------:|:---------------:|:-------------------------:|
+|   WPS   | GetCapabilities |  GetCapabilitiesHandler   |
+|   WPS   | DescribeProcess |  DescribeProcessHandler   |
+|   WPS   |     Execute     |      ExecuteHandler       |
+|   WPS   |    GetStatus    |     GetStatusHandler      |
+|   WPS   |    GetResult    |     GetResultHandler      |
+|   WPS   |     Dismiss     |      DismissHandler       |
+
+*Valid combination of parameters **service** and **operationName***
+
+<div>
+
+-	From the returned ***Producer<OperationHandler>***, the actual ***OperationHandler*** is extracted and then returned as an ***Optional***.
+-	If no valid ***OperationHandler*** could be found (i.e. the ***Optional*** contains *NULL*), a ***NullPointerException*** is thrown as the client requested an operation that is not supported by **JavaPS**. Otherwise, the ***OperationHandler*** is utilized to *handle()* the request.
+
+![Identification of Operation Handler in detail](UML_Diagrams/Generic_Workflow/get_operation_handler/get_operation_handler.png)*Identification of Operation Handler in detail*
 
 [Jump back to Sequence Diagram Documentation page](../sequence_diagrams.markdown)
 
