@@ -48,6 +48,8 @@ Overview of Maven Modules
 
 **JavaPS** and **Iceland** both use [Apache Maven](https://maven.apache.org/) as build automation tool to manage project dependencies and external libraries. **JavaPS** defines several sub-modules, each dedicated to a certain task. The following table shows each Maven module and its task:
 
+*Overview of JavaPS Maven Modules and their Tasks*
+
 | Maven Module Name | Task                                                                                                                                            |
 |:-----------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------:|
 |       core        |                                           provides Java representations of WPS requests and responses                                           |
@@ -58,12 +60,6 @@ Overview of Maven Modules
 |      service      |                                      provides operation validators and handlers for each WPS 2.0 operation                                      |
 |        xml        |                            provides helper components for interacting with XML requests/responses of WPS operations                             |
 |      webapp       |                                                       provides deployment descriptor etc.                                                       |
-
-<div align='center'>
-
-*Overview of JavaPS Maven Modules and their Tasks*
-
-</div>
 
 Spring Bean Configuration
 -------------------------
