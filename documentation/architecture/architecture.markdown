@@ -59,6 +59,12 @@ Overview of Maven Modules
 |        xml        |                            provides helper components for interacting with XML requests/responses of WPS operations                             |
 |      webapp       |                                                       provides deployment descriptor etc.                                                       |
 
+<div align='center'>
+
+*Overview of JavaPS Maven Modules and their Tasks*
+
+</div>
+
 Spring Bean Configuration
 -------------------------
 
