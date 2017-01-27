@@ -77,7 +77,7 @@ Basically, the Java class is annotated with `@Algorithm` to tell **JavaPS**, tha
 
 ### Class Annotation **@Algorithm**
 
-The annotation `@Algorithm` marks a Kava class comprises the following additional properties:
+The annotation `@Algorithm` marks a Java class comprises the following additional properties:
 
 -	String **identifier**: specifies the unique *job identifier* of the process; if not set, the *fully qualified class name* (Java package and class name) is used
 -	String **title**: the title of the process; can be chosen arbitrarily; if not set, the *fully qualified class name* (Java package and class name) is used
