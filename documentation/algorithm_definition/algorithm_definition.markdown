@@ -26,6 +26,8 @@ JavaPS Documentation - Adding new Processes/Algorithms
   - [Contents of an EPR - How to write/create an EPR for JavaPS](#contents-of-an-epr---how-to-writecreate-an-epr-for-javaps)
     - [Project Structure of exemplar "javaps-jts-backend" Algorithm Repository](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository)
     - [Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm)
+      - [Algorithm Definition](#algorithm-definition)
+      - [Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs)
     - [Registration of an EPR within JavaPS via Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -274,6 +276,22 @@ text about algorithm definition, in- and output bindings and implementations of 
 highlight the cooperation of ***InputOutputHandler*** and *binding* implementations regarding the parsing and generation of serviceable data for the process.
 
 Extending subclasses of AbstractGenerator shall provide functionality to generate serviceable output data for the processes offered by the 52N WPS framework. public abstract class AbstractInputOutputHandler implements InputOutputHandler
+
+##### Algorithm Definition
+
+package `src/main/java/org/n52/geoprocessing/jts/algorithm/`. class `JTSConvexHullAlgorithm.java`
+
+show Java code and explain it
+
+##### Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs
+
+package `src/main/java/org/n52/geoprocessing/jts/io/`
+
+sub-packages `data/binding/complex` for binding
+
+`datahandler/generator` and `datahandler/parser` for data handling and representation/transformation
+
+show Java classes and explain what they do. Especially show how binding and datahandlers cooperate.
 
 #### Registration of an EPR within JavaPS via Maven and Spring configuration
 
