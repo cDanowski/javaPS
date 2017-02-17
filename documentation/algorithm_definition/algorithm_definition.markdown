@@ -335,7 +335,7 @@ The ***AnnotatedAlgorithm*** `JTSConvexHullAlgorithm` is a process implementatio
 
 ##### Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs
 
-To integrate the `JTSConvexHullAlgorithm` into JavaPS, additional **binding** and **data handler** components are required to handle data conversion from *external request inputs* --> *internal algorithm data* and vice versa from *internal algorithm data* --> *external response outputs*. In particular, the `JTSConvexHullAlgorithm` expects input data as JTS `Geometry` and it computes its convex hull also as JTS `Geometry`. The **javaps-jts-backend** however provides a new **binding** and **data handlers** that allow clients to deliver the *input data* and receive *output results* using the *WKT (Well Known Text)* format. The **binding** wraps the internal JTS `Geometry` and the data handlers integrate into the infrastructure of **JavaPS** and take care of converting between *WKT* <--> *JTS Geometry* by relying on the binding. In the following, both aspects are intensified.
+To integrate the `JTSConvexHullAlgorithm` into JavaPS, additional **binding** and **data handler** components are required to handle data conversion from *external request inputs* &#8594; *internal algorithm data* and vice versa from *internal algorithm data* &#8594; *external response outputs*. In particular, the `JTSConvexHullAlgorithm` expects input data as JTS `Geometry` and it computes its convex hull also as JTS `Geometry`. The **javaps-jts-backend** however provides a new **binding** and **data handlers** that allow clients to deliver the *input data* and receive *output results* using the *WKT (Well Known Text)* format. The **binding** wraps the internal JTS `Geometry` and the data handlers integrate into the infrastructure of **JavaPS** and take care of converting between *WKT* &#8596; *JTS Geometry* by relying on the binding. In the following, both aspects are intensified.
 
 ###### Binding
 
@@ -388,7 +388,7 @@ The `JTSGeometryBinding` implements the interface `ComplexData` and acts as a Wr
 
 ###### Data Handlers - Implementations of Interface "InputOutputHandler"
 
-While **bindings** wrap a certain type of data, they do not convert between different data representations themselves. Instead, this action is performed by **data handlers**. E.g., the **javaps-jts-backend** provides such handlers to manage data transformations of geometric data between *WKT (Well Known Text)* <--> *JTS Geometry (via JTSGeometryBinding)*. Consequently, there is a component `WKTGenerator` handling the conversion from *JTS Geometry (via JTSGeometryBinding)* --> *WKT* and another component `WKTParser` that performs the conversion from *WKT* --> *JTS Geometry (via JTSGeometryBinding)*. To integrate into the infrastructure of **JavaPS**, these **data handlers** have to implement certain interfaces and extend certain abstract classes. The following UML class diagram highlights these hierarchy aspects of both components:
+While **bindings** wrap a certain type of data, they do not convert between different data representations themselves. Instead, this action is performed by **data handlers**. E.g., the **javaps-jts-backend** provides such handlers to manage data transformations of geometric data between *WKT (Well Known Text)* &#8596; *JTS Geometry (via JTSGeometryBinding)*. Consequently, there is a component `WKTGenerator` handling the conversion from *JTS Geometry (via JTSGeometryBinding)* &#8594; *WKT* and another component `WKTParser` that performs the conversion from *WKT* &#8594; *JTS Geometry (via JTSGeometryBinding)*. To integrate into the infrastructure of **JavaPS**, these **data handlers** have to implement certain interfaces and extend certain abstract classes. The following UML class diagram highlights these hierarchy aspects of both components:
 
 ![Data Handlers Type Hierarchy](UML_Diagrams/DataHandlers_ClassHierarchy.png)*Data Handlers Type Hierarchy*
 
@@ -538,9 +538,9 @@ As **JavaPS** expects **Spring configuration files** to be located in `src/main/
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
-	<bean id="wktParser" class="org.n52.geoprocessing.jts.io.datahandler.parser.WKTParser" />
-	<bean id="wktGenerator" class="org.n52.geoprocessing.jts.io.datahandler.generator.WKTGenerator" />
-	<bean id="jtsConvexHullAlgorithm" class="org.n52.geoprocessing.jts.algorithm.JTSConvexHullAlgorithm" />
+    <bean id="wktParser" class="org.n52.geoprocessing.jts.io.datahandler.parser.WKTParser" />
+    <bean id="wktGenerator" class="org.n52.geoprocessing.jts.io.datahandler.generator.WKTGenerator" />
+    <bean id="jtsConvexHullAlgorithm" class="org.n52.geoprocessing.jts.algorithm.JTSConvexHullAlgorithm" />
 
 </beans>
 ```
