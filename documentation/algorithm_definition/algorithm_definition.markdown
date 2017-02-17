@@ -6,29 +6,31 @@ JavaPS Documentation - Adding new Processes/Algorithms
 #### Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [How to add custom Processes/Algorithms to JavaPS](#how-to-add-custom-processesalgorithms-to-javaps)
-  - [Custom Algorithm Definitions through Java Annotations](#custom-algorithm-definitions-through-java-annotations)
-  - [Class Annotation **@Algorithm**](#class-annotation-algorithm)
-  - [Annotations for the Definition of *Process Inputs*](#annotations-for-the-definition-of-process-inputs)
-    - [Setter Annotation **@LiteralInput**](#setter-annotation-literalinput)
-    - [Setter Annotation **@ComplexInput**](#setter-annotation-complexinput)
-  - [Annotations for the Definition of *Process Outputs*](#annotations-for-the-definition-of-process-outputs)
-    - [Setter Annotation **@LiteralOutput**](#setter-annotation-literaloutput)
-    - [Setter Annotation **@ComplexOutput**](#setter-annotation-complexoutput)
-  - [Annotation **@Execute**](#annotation-execute)
-  - [Conclusion and Recommendation for an **External Processing Repository**](#conclusion-and-recommendation-for-an-external-processing-repository)
-- [Creating an External Processing Repository (EPR)](#creating-an-external-processing-repository-epr)
-  - [Introduction - What is an EPR?](#introduction---what-is-an-epr)
-  - [Benefits of using an EPR](#benefits-of-using-an-epr)
-  - [Contents of an EPR - How to write/create an EPR for JavaPS](#contents-of-an-epr---how-to-writecreate-an-epr-for-javaps)
-    - [Project Structure of exemplar "javaps-jts-backend" Algorithm Repository](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository)
-    - [Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm)
-      - [Algorithm Definition](#algorithm-definition)
-      - [Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs)
-    - [Registration of an EPR within JavaPS via Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration)
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+-	[How to add custom Processes/Algorithms to JavaPS](#how-to-add-custom-processesalgorithms-to-javaps)
+	-	[Custom Algorithm Definitions through Java Annotations](#custom-algorithm-definitions-through-java-annotations)
+	-	[Class Annotation **@Algorithm**](#class-annotation-algorithm)
+	-	[Annotations for the Definition of *Process Inputs*](#annotations-for-the-definition-of-process-inputs)
+	-	[Setter Annotation **@LiteralInput**](#setter-annotation-literalinput)
+	-	[Setter Annotation **@ComplexInput**](#setter-annotation-complexinput)
+	-	[Annotations for the Definition of *Process Outputs*](#annotations-for-the-definition-of-process-outputs)
+	-	[Setter Annotation **@LiteralOutput**](#setter-annotation-literaloutput)
+	-	[Setter Annotation **@ComplexOutput**](#setter-annotation-complexoutput)
+	-	[Annotation **@Execute**](#annotation-execute)
+	-	[Conclusion and Recommendation for an **External Processing Repository**](#conclusion-and-recommendation-for-an-external-processing-repository)
+-	[Creating an External Processing Repository (EPR)](#creating-an-external-processing-repository-epr)
+	-	[Introduction - What is an EPR?](#introduction---what-is-an-epr)
+	-	[Benefits of using an EPR](#benefits-of-using-an-epr)
+	-	[Contents of an EPR - How to write/create an EPR for JavaPS](#contents-of-an-epr---how-to-writecreate-an-epr-for-javaps)
+	-	[Project Structure of exemplar "javaps-jts-backend" Algorithm Repository](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository)
+	-	[Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm)
+		-	[Algorithm Definition](#algorithm-definition)
+		-	[Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs)
+	-	[Registration of an EPR within JavaPS via Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -99,8 +101,6 @@ The annotation `@Algorithm` marks a Java class comprises the following additiona
 
 ### Annotations for the Definition of *Process Inputs*
 
-again say, that currently no BBOX is supported
-
 Typically, a process has one or more *inputs* and produces one or more *outputs*. Consequently, the *in-* and *outputs* can be defined via appropriate annotations as well. E.g., the annotation `@LiteralInput(identifier = "X")` marks a Java *setter-method* that sets the literal input with identifier "X". The input itself is stored as a Java class property, which is set by the annotated method when parsing the request and instantiating the ***Algorithm***. However, as of January 2017, only *literal* and *complex inputs* can be defined within **annotated algorithms**. Support for *bounding box inputs* is not yet implemented. To define a *complex input*, an *input* *setter-method* may be annotated with `@ComplexInput`. In the same way, any *output* may be specified by annotating a suitable *getter-method* with `@LiteralOutput` or `@ComplexOutput`. Similar to `@Algorithm` the *in-* and *output* definitions provide additional properties to specify details. Subsequently, these properties are explained:
 
 #### Setter Annotation **@LiteralInput**
@@ -115,7 +115,7 @@ Annotation `@LiteralInput` Properties
 -	String **defaultValue**: a default value that is used when the input is not specified within an *Execute* request
 -	String[] **allowedValues**: an array of concrete allowed values for the input;
 -	String **uom**: specification of the *unit of measure*
--	Class **binding**: reference to a *binding* class that implements/extends *LiteralType.class* and thus is able to parse the input from an *Execute* request correctly; basically this *binding* component acts as a wrapper for the input
+-	Class **binding**: reference to a *binding* class that implements/extends *LiteralType.class* and thus is able to parse the input from an *Execute* request correctly; basically this *binding* component acts as a wrapper for the input; more information about *binding* is provided in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
 
 #### Setter Annotation **@ComplexInput**
 
@@ -127,7 +127,7 @@ Annotation `@ComplexInput` Properties
 -	long **minOccurs**: the minimum number of occurrences within an *Execute* request; default value is "1"
 -	long **maxOccurs**: the maximum number of occurrences within an *Execute* request; default value is "1"
 -	long **maximumMegaBytes**: a limitation of the maximum size of the complex input's payload
--	Class **binding**: reference to a *binding* class that implements/extends *ComplexData.class* and thus is able to parse the complex input from an *Execute* request correctly; basically this *binding* component acts as a wrapper for the input
+-	Class **binding**: reference to a *binding* class that implements/extends *ComplexData.class* and thus is able to parse the complex input from an *Execute* request correctly; basically this *binding* component acts as a wrapper for the input; more information about *binding* is provided in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
 
 ### Annotations for the Definition of *Process Outputs*
 
@@ -139,7 +139,7 @@ Annotation `@LiteralOutput` Properties
 -	String **title**: the title of the output; can be chosen arbitrarily
 -	String **abstrakt**: a description of the output
 -	String **uom**: specification of the *unit of measure*
--	Class **binding**: reference to a *binding* class that implements/extends *LiteralType.class* and thus is able to encode the output correctly; basically this *binding* component acts as a wrapper for the output
+-	Class **binding**: reference to a *binding* class that implements/extends *LiteralType.class* and thus is able to encode the output correctly; basically this *binding* component acts as a wrapper for the output; more information about *binding* is provided in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
 
 #### Setter Annotation **@ComplexOutput**
 
@@ -148,7 +148,17 @@ Annotation `@ComplexOutput` Properties
 -	String **identifier**: specifies the unique *output identifier* of the output
 -	String **title**: the title of the output; can be chosen arbitrarily
 -	String **abstrakt**: a description of the output
--	Class **binding**: reference to a *binding* class that implements/extends *ComplexData.class* and thus is able to encode the output correctly; basically this *binding* component acts as a wrapper for the output
+-	Class **binding**: reference to a *binding* class that implements/extends *ComplexData.class* and thus is able to encode the output correctly; basically this *binding* component acts as a wrapper for the output; more information about *binding* is provided in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
+
+### The Role of the Binding Implementations
+
+During the previous explanation of the annotations for *in-* and *outputs*, a specific annotation called **binding** was introduced. Its purpose and relevance will be described in this section. In general, a **WPS** process defines several process *in-* and *outputs*. When a client constructs and sends an **Execute request**, the *inputs* are specified using a certain **format/encoding**. Also the client may request the process *output(s)* to be **encoded in a certain format**. While the available **formats** are predefined by the **JavaPS** implementation of that process, the ***Algorithm*** implementation uses a single internal representation of the *in-* and *outputs*. Hence, transformation between the different data representations is necessary.
+
+In essence, a **JavaPS** ***Algorithm*** may internally rely on format *Internal_A* to interpret data and perform computations. A client however may send an **Execute request**, where the input is specified using different format *External_B* and the output should be encoded in another format *External_C*. During process management and execution, the external input representation (*External_B*) first has to be transformed/decoded into the internal representation (*Internal_A*) so the process may use it to compute the result (which again uses the internal data representation of the ***Algorithm*** implementation). When creating the **Execute response object**, the internal representation of the process *output/result* then has to be encoded according to the external format (*External_C*) as requested by the client.
+
+Whenever differences within the data representations of process *in-* and *outputs* between internal ***Algorithm*** implementation and external request/response objects occur, a **binding** implementation can be used. It acts as a wrapping component for the internal data representation and provides means to access and manage its data. In collaboration with appropriate **data handling** components, **binding** implementations control the correct transformations between the different internal and external data representations.
+
+As process *in-* and *outputs* may have different types (e.g. *literal* or *complex*), a **Binding** component must implement the relevant interface. While ***Binding*** classes for *literal in-/outputs* implement the interface ***LiteralData***, the interface *ComplexData* has to be implemented by those ***Bindings*** that wrap a *complex in-/output*. A detailed example is provided in the context of an [External Processing Repository (EPR)](#creating-an-external-processing-repository-epr) in sub-section [Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs).
 
 ### Annotation **@Execute**
 
@@ -180,7 +190,7 @@ An exemplar **EPR** for **JavaPS** is the 52&deg;North GitHub-project [javaps-jt
 In general, an **EPR** adds the following components to the basic **JavaPS** WPS infrastructure:
 
 -	**Algorithm** definitions through annotated Java classes as described above.
--	**Binding** implementations for process *in-* and *outputs*.
+-	**Binding** implementations for de- and encoding of process *in-* and *outputs*, as described in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations).
 -	**In- and Output Handlers**: Together with an associated **Binding** these handlers provide serviceable data required by the associated **algorithm/process**. This is relevant in the context of **data representation** and its **de-** and **encoding**. E.g., while in a WPS **Execute** request, input geometries might be encoded using *Well-Known-Text(WKT)* format, an internal **algorithm/process** within **javaps-jts-backend** may require them as proper *JTS Java objects*. Furthermore, while the process may use these *JTS inputs* to compute certain *JTS output objects*, the **Execute** response object that is returned to the client could display them as *WKT* again (to be precise, the user submits the desired in- and output format within request parameters). In conclusion, **In- and Output Handlers** combined with suitable **Binding** implementations take care of proper format transformations between different internal and external representations of process in- and outputs. Section [Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm) explains their coexistence in more detail.
 
 The presentation of the exemplar [javaps-jts-backend](https://github.com/52North/javaps-jts-backend) is divided into three parts. First, its [project structure](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository) is shown followed by an explanation of the required [Java resources](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm) and finally ends with the necessary [Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration).
@@ -237,7 +247,7 @@ While new **algorithms/processes** and related *binding* and *data handling* com
 
 #### Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"
 
-Overview of Java related resources:
+This section focuses on the presentation of an exemplar ***Algorithm*** implementation and related additional Java resources of the **javaps-jts-backend**. For clarification, the folder structure and important Java files are given below:
 
 <pre>
 <i>javaps-jts-backend</i>
@@ -269,29 +279,251 @@ Overview of Java related resources:
                                                   | - <b>"WKTParser.java"</b>
 </pre>
 
-The **algorithm/process** and related *binding* and *data handling* components are defined in the sub-packages of `src/main/java/`. To be precise, an implementation of a convex hull algorithm is provided in `org/n52/geoprocessing/jts/algorithm/JTSConvexHullAlgorithm.java`.
-
-text about algorithm definition, in- and output bindings and implementations of ***InputOutputHandler*** (WktGenerator and WktParser)
-
-highlight the cooperation of ***InputOutputHandler*** and *binding* implementations regarding the parsing and generation of serviceable data for the process.
-
-Extending subclasses of AbstractGenerator shall provide functionality to generate serviceable output data for the processes offered by the 52N WPS framework. public abstract class AbstractInputOutputHandler implements InputOutputHandler
+The **algorithm/process** and related *binding* and *data handling* components are defined in the sub-packages of `src/main/java/`. To be precise, an implementation of a convex hull algorithm is provided in `org/n52/geoprocessing/jts/algorithm/JTSConvexHullAlgorithm.java`. According to [the guide on how to add new processes/algorithms to JavaPS](#how-to-add-custom-processesalgorithms-to-javaps), this component is the implementation of an ***AnnotatedAlgorithm*** that adds a process to compute the convex hull of an input geometry to **JavaPS**. However, in most cases a new ***Algorithm*** implementation has to be accompanied by additional *binding* and *data handling* components. As mentioned in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations), those additional components take care of suitable data representation between **Execute requests** and the internal **Algorithm representation** including the required transformation (or de- and encoding) steps. Within the scope of the `JTSConvexHullAlgorithm`, those components are implemented by the *binding* `JTSGeometryBinding.java` and the two data handlers `WKTGenerator.java` and `WKTParser`. Each of these components is introduced in detail subsequently.
 
 ##### Algorithm Definition
 
-package `src/main/java/org/n52/geoprocessing/jts/algorithm/`. class `JTSConvexHullAlgorithm.java`
+Package: `src/main/java/org/n52/geoprocessing/jts/algorithm/`.
 
-show Java code and explain it
+Component: `JTSConvexHullAlgorithm.java`
+
+Java Code:
+
+```
+package org.n52.geoprocessing.jts.algorithm;
+
+import org.n52.geoprocessing.jts.io.data.binding.complex.JTSGeometryBinding;
+import org.n52.javaps.algorithm.annotation.Algorithm;
+import org.n52.javaps.algorithm.annotation.ComplexInput;
+import org.n52.javaps.algorithm.annotation.ComplexOutput;
+import org.n52.javaps.algorithm.annotation.Execute;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+/**
+ * This algorithm creates a convex hull of a JTS geometry using build the in method.
+ * @author BenjaminPross
+ *
+ */
+@Algorithm(version = "1.1.0")
+public class JTSConvexHullAlgorithm{
+
+    private Geometry result;
+    private Geometry data;
+
+    @ComplexOutput(identifier = "result", binding = JTSGeometryBinding.class)
+    public Geometry getResult() {
+        return result;
+    }
+
+    @ComplexInput(identifier = "data", binding = JTSGeometryBinding.class)
+    public void setData(Geometry data) {
+        this.data = data;
+    }
+
+    @Execute
+    public void runAlgorithm() {
+        result = data.convexHull();
+    }
+}
+```
+
+The ***AnnotatedAlgorithm*** `JTSConvexHullAlgorithm` is a process implementation for **JavaPS** that makes use of the [Java Topology Suite](https://live.osgeo.org/en/overview/jts_overview.html) to compute the *convex hull* of an input geometry. It comprises two properties, `data` for the *input* geometry and `result` for the *output* convex hull geometry. Both are of type JTS `Geometry`. The `setData(Geometry data)` and `getResult()` methods are annotated by `@ComplexInput` and `@ComplexOutput` respectively to indicate that both deal with **complex data** with regard to the WPS specification. Both annotations include the definitions of the *in-* and *output* `identifier` as well as the associated *binding* implementation by component `JTSGeometryBinding.class`. The latter is explained in the following section. Finally, the annotation `@Execute` marks the method `runAlgorithm()`, which will be run on process execution. It computes the convex hull of `data` and stores it in the `result` property.
 
 ##### Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs
 
-package `src/main/java/org/n52/geoprocessing/jts/io/`
+To integrate the `JTSConvexHullAlgorithm` into JavaPS, additional **binding** and **data handler** components are required to handle data conversion from *external request inputs* --> *internal algorithm data* and vice versa from *internal algorithm data* --> *external response outputs*. In particular, the `JTSConvexHullAlgorithm` expects input data as JTS `Geometry` and it computes its convex hull also as JTS `Geometry`. The **javaps-jts-backend** however provides a new **binding** and **data handlers** that allow clients to deliver the *input data* and receive *output results* using the *WKT (Well Known Text)* format. The **binding** wraps the internal JTS `Geometry` and the data handlers integrate into the infrastructure of **JavaPS** and take care of converting between *WKT* <--> *JTS Geometry* by relying on the binding. In the following, both aspects are intensified.
 
-sub-packages `data/binding/complex` for binding
+###### Binding
 
-`datahandler/generator` and `datahandler/parser` for data handling and representation/transformation
+Package: `src/main/java/org/n52/geoprocessing/jts/io/data/binding/complex`
 
-show Java classes and explain what they do. Especially show how binding and datahandlers cooperate.
+Component: `JTSGeometryBinding.java`
+
+Java Code:
+
+```
+package org.n52.geoprocessing.jts.io.data.binding.complex;
+
+import org.n52.javaps.io.complex.ComplexData;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+/**
+ * This class wraps a JTS Geometry.
+ * @author Benjamin Pross
+ *
+ */
+public class JTSGeometryBinding implements ComplexData<Geometry> {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3415522592135759594L;
+    private Geometry geom;
+
+    public JTSGeometryBinding(Geometry geom){
+        this.geom = geom;
+    }
+
+    public Geometry getPayload() {
+        return this.geom;
+    }
+
+    public Class<?> getSupportedClass() {
+        return Geometry.class;
+    }
+
+    public void dispose() {
+
+    }
+
+}
+```
+
+The `JTSGeometryBinding` implements the interface `ComplexData` and acts as a Wrapper for a JTS `Geometry`. Its constructor takes one parameter of type JTS `Geometry` that is stored as class property `geom`. The methods `getPayload()` and `getSupportedClass()` are inherited from `ComplexData` and contain important information required by the infrastructure of **JavaPS**. While `getSupportedClass()` points to the Java type that is supported by this **binding** (here `Geometry.class`), `getPayload()` retrieves the **bindings** actual value (here the wrapped JTS `Geometry` instance). From the perspective of **JavaPS** the *supportedClass* is required to determine, which **bindings** are available for which type of data.
+
+###### Data Handlers - Implementations of Interface "InputOutputHandler"
+
+While **bindings** wrap a certain type of data, they do not convert between different data representations themselves. Instead, this action is performed by **data handlers**. E.g., the **javaps-jts-backend** provides such handlers to manage data transformations of geometric data between *WKT (Well Known Text)* <--> *JTS Geometry (via JTSGeometryBinding)*. Consequently, there is a component `WKTGenerator` handling the conversion from *JTS Geometry (via JTSGeometryBinding)* --> *WKT* and another component `WKTParser` that performs the conversion from *WKT* --> *JTS Geometry (via JTSGeometryBinding)*. To integrate into the infrastructure of **JavaPS**, these **data handlers** have to implement certain interfaces and extend certain abstract classes. The following UML class diagram highlights these hierarchy aspects of both components:
+
+![Data Handlers Type Hierarchy](UML_Diagrams/DataHandlers_ClassHierarchy.png)*Data Handlers Type Hierarchy*
+
+The red coloured abstract classes and interfaces derive from **JavaPS**, whereas the magenta coloured components `WKTGenerator` and `WKTParser` come from **javaps-jts-backend**. At the top of the diagram, the central interface `InputOutputHandler` prescribes essential methods concerning supported *formats* and *bindings* that have to be implemented by any **data handler**. Note that for reasons of simplicity, the Java types of the method parameters are neglected within the diagram. On the left, two abstract components `AbstractInputOutputHandler` and `AbstractPropertiesInputOutputHandler` implement `InputOutputHandler` and further provide methods to *add* a new supported *format* or *binding*. It has to be mentioned here that these abstract classes already provide an abstract implementation of the interface methods dictated by `InputOutputHandler`. Hence, custom **data handlers** do not have to implement those themselves. In addition, the `AbstractPropertiesInputOutputHandler` implements another interface called `ConfigurableClass` that provides means to fetch available formats from a JSON properties file.
+
+On the right side, the two supplementary interfaces `InputHandler` and `OutputHandler` inherit from generic `InputOutputHandler` and constitute specializations regarding the handling of *in-* or *outputs*. In particular, `InputHandler` prescribes the method `parse(description, input, format)` whose task is to *parse an input from the request object and deliver it as serviceable data for the target algorithm*. In contrast, `OutputHandler` demands a method `generate(description, data, format)` that should take the *result data* produced by an ***Algorithm*** and *generate an appropriate output representation for inclusion within a client response object*.
+
+Finally, the actual *data handlers* `WKTParser` as well as `WKTGenerator` both inherit from `AbstractPropertiesInputOutputHandler` and thus inherit the abstract implementation of the generic *format* and *binding* management. Moreover, they implement their counterpart of the two specialized interfaces `InputHandler` or `OutputHandler` respectively. In consequence, `WKTParser` has to implement the `parse(description, input, format)` method, while `WKTGenerator` must implement `generate(description, data, format)`.
+
+**Source Code of WKTParser and WKTGenerator**
+
+In the following, the source code of both **data handlers** `WKTParser` and `WKTGenerator` is presented. Beneath method descriptions the interaction/cooperation with the **binding** component `JTSGeometryBinding` is highlighted.
+
+**WKTParser**
+
+Package: `src/main/java/org/n52/geoprocessing/jts/io/datahandler/`
+
+Component: and `parser/WKTParser.java`
+
+Source Code:
+
+```
+//package and import statements omitted
+
+/**
+ * This class parses String representations out of JTS Geometries.
+ *
+ * @author Benjamin Pross
+ *
+ */
+@Properties(
+        defaultPropertyFileName = "wkt.properties")
+public class WKTParser extends AbstractPropertiesInputOutputHandler implements InputHandler {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(WKTParser.class);
+
+    public WKTParser() {
+        super();
+        addSupportedBinding(JTSGeometryBinding.class);
+    }
+
+    public Data<?> parse(TypedProcessInputDescription<?> description,
+            InputStream input,
+            Format format) throws IOException, DecodingException {
+        try {
+            Geometry g = new WKTReader().read(new InputStreamReader(input));
+
+            return new JTSGeometryBinding(g);
+
+        } catch (ParseException e) {
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+}
+```
+
+`WKTParser` only comprises a default constructor and the `parse()` method. The former is used to add/register the associated **binding(s)** and **format(s)** to its internal *set of supported bindings* and *set of supported formats*. With regard to the **formats**, the `super()` call invokes the `getFormatFromProperties()` method of super class `AbstractPropertiesInputOutputHandler`, which expects a *resource file* containing entries of JSON encoded *supported formats*. For this reason, the class `WKTParser` is annotated with `@Properties(defaultPropertyFileName = "wkt.properties")` referencing the name of the associated *resource file* located in `src/main/resources`. Its content is displayed below:
+
+*Content of wkt.properties resource file*
+
+```
+{
+  "formats": [
+  {"mimeType":"application/wkt", "default":true},
+  {"mimeType":"application/wkt", "encoding":"base64"}
+  ]
+}
+```
+
+The JSON array contains valid **format definitions** that are supported by `WKTParser` (i.e. *WKT* related formats) that, as mentioned above, are registered during its instantiation.
+
+Concerning supported **bindings**, `WKTParser` directly registers them within the constructor via `addSupportedBinding()`. Here, only the **binding** `JTSGeometryBinding` is supported.
+
+The inherited `parse()` method contains the implementation to transform a *WKT Geometry String* into a *JTS Geometry* using the named **binding**. In particular, a `WKTReader` from the [Java Topology Suite](https://live.osgeo.org/en/overview/jts_overview.html) is utilized to `read` an incoming `InputStream` that holds the *WKT Geometry String* and produce a *JTS* `Geometry` instance. Then a new instance of `JTSGeometryBinding` is created and returned wrapping the *JTS* `Geometry`. Afterwards, the **JavaPS** infrastructure may use it to set the *input* parameter of the ***JTSConvexHullAlgorithm***.
+
+**TODO** include reference to documentation description of client request, where the decoding of request inputs was discussed (execute job execution handle request).
+
+**TODO** maybe add reference in other documentation parts pointing to this description here!
+
+**WKTGenerator**
+
+Package: `src/main/java/org/n52/geoprocessing/jts/io/datahandler/`
+
+Component: `generator/WKTGenerator.java`
+
+Source Code:
+
+```
+//package and import statements omitted
+
+/**
+ * This class generates a String representation out of a JTS Geometry.
+ *
+ * @author Benjamin Pross
+ *
+ */
+@Properties(
+        defaultPropertyFileName = "wkt.properties")
+public class WKTGenerator extends AbstractPropertiesInputOutputHandler implements OutputHandler {
+
+    public WKTGenerator() {
+        super();
+        addSupportedBinding(JTSGeometryBinding.class);
+    }
+
+    public InputStream generate(TypedProcessOutputDescription<?> description,
+            Data<?> data,
+            Format format) throws IOException, EncodingException {
+        if (data instanceof JTSGeometryBinding) {
+            Geometry g = ((JTSGeometryBinding) data).getPayload();
+
+            String wktString = new WKTWriter().write(g);
+
+            InputStream is = new ByteArrayInputStream(wktString.getBytes());
+
+            return is;
+        }
+        return null;
+    }
+
+}
+```
+
+Similar to `WKTParser` the implementation of `WKTGenerator` comprises an equivalent constructor performing the registration of the same **format(s)** (*WKT* related) and **binding(s)** (***JTSGeometryBinding***). Moreover, it implements the `generate()` function inherited by `OutputHandler` to convert a *JTS Geometry* to a *WKT String* `InputStream` that can be used for a client response object. In detail, the `generate()` method includes the relevant `Data<?> data` object as parameter. In general, it will be delivered using the associated **binding**. In this case, `data` is an instance of `JTSGeometryBinding` wrapping the *JTS* `Geometry` object. From the **binding**, the wrapped content is extracted with the help of `getPayload()`. Then the *JTS* `WKTWriter` is utilized to `write()` the *JTS* `Geometry` object as *WKT String*, which is afterwards returned as `InputStream`.
+
+**TODO** include reference to documentation description of client response, where the encoding of results was discussed.
+
+**TODO** maybe add reference in other documentation parts pointing to this description here!
+
+In summary, this section highlighted how the presented **data handlers** `WKTParser` and `WKTGenerator` work in cooperation with their associated **binding** `JTSGeometryBinding` to decode request *inputs* into serviceable internal Java objects and encode job results into client-specified *output* response representations. As example, the transformation between *WKT String representations* and *JTS Geometry instances* were focused.
 
 #### Registration of an EPR within JavaPS via Maven and Spring configuration
 
@@ -299,6 +531,8 @@ information on registering algorithms, bindings, and InputOutputHandlers via Mav
 
 question: Maven configuration: declare EPR as dependency of JavaPS and thats it? Spring configuration file will then be found when it is located in *src/main/resources/components/* (according to the definitions within JavaPS's pom.xml --> it is configured to load all resources from src/main/resources/) --> this file has to contain all bean definitions including algorithms and data handlers!
 
-wkt.Properties file for WktParser and WktGenerator
+--> als jar packen und in den laufenden JavaPS in web-inf/lib reinwerfen und JavaPS neustarten. als Alternative
+
+wkt.Properties file for WKTParser and WKTGenerator
 
 [Jump back to main JavaPS documentation page](../JavaPS_Documentation.markdown)
