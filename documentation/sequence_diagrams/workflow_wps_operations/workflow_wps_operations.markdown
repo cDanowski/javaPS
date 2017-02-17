@@ -251,7 +251,7 @@ To concretize the handling and processing of an ***ExecuteRequest***, the *handl
 To complete the description of the **Execute** operation, the next diagram focuses the execution of a ***Job***. In the previous diagram, this step was simplified and only showed that a ***Job*** instance was created, whose execution produces a ***Result*** object containing all requested *outputs* as ***ProcessData***. Hence, a more detailed description of the necessary processing steps is given below:
 
 1.	when the ***Engine*** is called via the *execute()* method, it first has to retrieve the ***IAlgorithm*** implementation that is associated to the *process identifier*. For this reason, it delegates the retrieval to the ***RepositoryManager*** that locates the ***AlgorithmRepository*** containing the ***IAlgorithm*** implementation for the *process identifier*.
-2.	from the ***IAlgorithm*** implementation, its ***ProcessDescription*** is used to decode the *inputs* as ***ProcessInputs*** with the help of ***ProcessInputDecoder***.
+2.	from the ***IAlgorithm*** implementation, its ***ProcessDescription*** is used to decode the *inputs* as ***ProcessInputs*** with the help of ***ProcessInputDecoder***. More information about the decoding of process inputs is provided in section [Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](../../algorithm_definition/algorithm_definition.markdown#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs) of a separate guide about [Algorithm definitions and the creation of an External Processing Repository](../../algorithm_definition/algorithm_definition.markdown).
 3.	next, the ***JobIdGenerator*** component is called to *create()* a new unique *job identifier*. Once done, a new ***Job*** instance is created as ***Future*** object using the parameters *algorithm*, *job identifier*, *inputs*, *outputs* and *response mode*.
 4.	the ***Job*** instance is *submitted* to the ***ExecutorService***, which is a component that manages and triggers job execution. As the ***Job*** is also a ***Future*** object it can be queried for information such as its *status* at any time. Only the ***Result*** cannot be retrieved right away, since that has to be computed before. However, any ***Future*** object offers a *get()* method, which will wait, if necessary, to complete the execution and then return the *result*. The ***Engine*** now adds the ***Job*** to its class property maps **cancelers** and **jobs** and return the *job identifier* to the ***ExecuteHandler***.
 5.	depending on the *execution strategy* the ***ExecutorService*** will *run()* the execution of the ***Job*** eventually. The ***Job***'s *status* is updated to **running** and the ***IAlgorithm*** implementation is triggered to *execute()* the process.
@@ -396,22 +396,22 @@ public void computeBuffer_dismissable() {
 
     for (Geometry geometry : inputGeometries) {
 
-    	/*
-    	 * before computing the buffer for the current geometry
-    	 * check if the current thread was interrupted
-    	 *
-    	 * if so, then we must manually exit the computation and return!
-    	 */
-    	if (Thread.currentThread().isInterrupted())
-    		return;
+        /*
+         * before computing the buffer for the current geometry
+         * check if the current thread was interrupted
+         *
+         * if so, then we must manually exit the computation and return!
+         */
+        if (Thread.currentThread().isInterrupted())
+            return;
 
-    	/*
-    	 * else continue computation
-    	 */
-    	else{
-    		Geometry buffer = geometry.buffer(radius);
-    		bufferedGeometries.add(buffer);
-    	}
+        /*
+         * else continue computation
+         */
+        else{
+            Geometry buffer = geometry.buffer(radius);
+            bufferedGeometries.add(buffer);
+        }
 }
 
         /*
