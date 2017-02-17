@@ -169,9 +169,9 @@ After specifying the *in-* and *outputs* of the process, only one mandatory anno
 
 ### Conclusion and Recommendation for an **External Processing Repository**
 
-Concluding, the whole definition of an ***Algorithm*** can be specified through the appropriate Java annotations. On start-up, the application automatically scans Java resources for classes annotated with `@Algorithm` and thus makes them operatable. If necessary, new implementations of ***LiteralType*** or ***ComplexData*** (so-called *bindings*) may be provided alongside to correctly parse and encode the in- and outputs of the process.
+Concluding, the whole definition of an ***Algorithm*** can be specified through the appropriate Java annotations. On start-up, the application automatically scans Java resources defined as **Spring beans** for classes annotated with `@Algorithm` and thus makes them operatable. If necessary, new implementations of ***LiteralType*** or ***ComplexData*** (so-called **bindings**) may be provided alongside to correctly parse and encode the in- and outputs of the process.
 
-In theory, new implementations may be added within the packages of **JavaPS** directly. However, it is recommended to outsource the ***Algorithm*** implementations into a so-called **External Processing/Algorithm Repository**, e.g. as stand-alone [Maven](https://maven.apache.org/) project that encapsulates the definitions of all algorithms and necessary *binding* implementations of ***LiteralType*** and ***ComplexData*** for proper de- and encoding. Hints and useful information for creating such an external repository are presented below.
+In theory, new implementations may be added within the packages of **JavaPS** directly. However, it is recommended to outsource the ***Algorithm*** implementations into a so-called **External Processing/Algorithm Repository**, e.g. as stand-alone [Maven](https://maven.apache.org/) project that encapsulates the definitions of all algorithms and necessary **binding** implementations of ***LiteralType*** and ***ComplexData*** and accompanying **data handlers** for proper de- and encoding of process *in-* and *outputs*. Hints and useful information for creating such an external repository are presented below.
 
 Creating an External Processing Repository (EPR)
 ------------------------------------------------
