@@ -6,31 +6,34 @@ JavaPS Documentation - Adding new Processes/Algorithms
 #### Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
--	[How to add custom Processes/Algorithms to JavaPS](#how-to-add-custom-processesalgorithms-to-javaps)
-	-	[Custom Algorithm Definitions through Java Annotations](#custom-algorithm-definitions-through-java-annotations)
-	-	[Class Annotation **@Algorithm**](#class-annotation-algorithm)
-	-	[Annotations for the Definition of *Process Inputs*](#annotations-for-the-definition-of-process-inputs)
-	-	[Setter Annotation **@LiteralInput**](#setter-annotation-literalinput)
-	-	[Setter Annotation **@ComplexInput**](#setter-annotation-complexinput)
-	-	[Annotations for the Definition of *Process Outputs*](#annotations-for-the-definition-of-process-outputs)
-	-	[Setter Annotation **@LiteralOutput**](#setter-annotation-literaloutput)
-	-	[Setter Annotation **@ComplexOutput**](#setter-annotation-complexoutput)
-	-	[Annotation **@Execute**](#annotation-execute)
-	-	[Conclusion and Recommendation for an **External Processing Repository**](#conclusion-and-recommendation-for-an-external-processing-repository)
--	[Creating an External Processing Repository (EPR)](#creating-an-external-processing-repository-epr)
-	-	[Introduction - What is an EPR?](#introduction---what-is-an-epr)
-	-	[Benefits of using an EPR](#benefits-of-using-an-epr)
-	-	[Contents of an EPR - How to write/create an EPR for JavaPS](#contents-of-an-epr---how-to-writecreate-an-epr-for-javaps)
-	-	[Project Structure of exemplar "javaps-jts-backend" Algorithm Repository](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository)
-	-	[Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm)
-		-	[Algorithm Definition](#algorithm-definition)
-		-	[Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs)
-	-	[Registration of an EPR within JavaPS via Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration)
+- [How to add custom Processes/Algorithms to JavaPS](#how-to-add-custom-processesalgorithms-to-javaps)
+  - [Custom Algorithm Definitions through Java Annotations](#custom-algorithm-definitions-through-java-annotations)
+  - [Class Annotation **@Algorithm**](#class-annotation-algorithm)
+  - [Annotations for the Definition of *Process Inputs*](#annotations-for-the-definition-of-process-inputs)
+    - [Setter Annotation **@LiteralInput**](#setter-annotation-literalinput)
+    - [Setter Annotation **@ComplexInput**](#setter-annotation-complexinput)
+  - [Annotations for the Definition of *Process Outputs*](#annotations-for-the-definition-of-process-outputs)
+    - [Setter Annotation **@LiteralOutput**](#setter-annotation-literaloutput)
+    - [Setter Annotation **@ComplexOutput**](#setter-annotation-complexoutput)
+  - [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
+  - [Annotation **@Execute**](#annotation-execute)
+  - [Conclusion and Recommendation for an **External Processing Repository**](#conclusion-and-recommendation-for-an-external-processing-repository)
+- [Creating an External Processing Repository (EPR)](#creating-an-external-processing-repository-epr)
+  - [Introduction - What is an EPR?](#introduction---what-is-an-epr)
+  - [Benefits of using an EPR](#benefits-of-using-an-epr)
+  - [Contents of an EPR - How to write/create an EPR for JavaPS](#contents-of-an-epr---how-to-writecreate-an-epr-for-javaps)
+    - [Project Structure of exemplar "javaps-jts-backend" Algorithm Repository](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository)
+    - [Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm)
+      - [Algorithm Definition](#algorithm-definition)
+      - [Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs)
+        - [Binding](#binding)
+        - [Data Handlers - Implementations of Interface "InputOutputHandler"](#data-handlers---implementations-of-interface-inputoutputhandler)
+    - [Registration of an EPR within JavaPS via Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration)
+      - [Spring Configuration file](#spring-configuration-file)
+      - [Registration of EPR within JavaPS](#registration-of-epr-within-javaps)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -527,12 +530,46 @@ In summary, this section highlighted how the presented **data handlers** `WKTPar
 
 #### Registration of an EPR within JavaPS via Maven and Spring configuration
 
-information on registering algorithms, bindings, and InputOutputHandlers via Maven and Spring to make them usable within **JavaPS**.
+In the previous sections the components and functional responsibilities of the **javaps-jts-backend** were described. This paragraph explains, how those components have to be registered within **JavaPS**. To integrate the **algorithms**, **bindings**, **data handlers** and their accompanying resources into the **JavaPS** infrastructure, a developer has to do two things: first, create a **Spring configuration file** declaring the implemented Java resources as *Spring beans* and second *register* the **EPR** within **JavaPS**. Once both conditions are fulfilled, the **JavaPS** infrastructure is capable of identifying the contents of the **EPR** (by loading them through the **Spring configuration file**) and make them available within its service offerings. Both aspects are described in detail below.
 
-question: Maven configuration: declare EPR as dependency of JavaPS and thats it? Spring configuration file will then be found when it is located in *src/main/resources/components/* (according to the definitions within JavaPS's pom.xml --> it is configured to load all resources from src/main/resources/) --> this file has to contain all bean definitions including algorithms and data handlers!
+##### Spring Configuration file
 
---> als jar packen und in den laufenden JavaPS in web-inf/lib reinwerfen und JavaPS neustarten. als Alternative
+As **JavaPS** expects **Spring configuration files** to be located in `src/main/resources/components` the configuration file of **javaps-jts-backend** is located in `src/main/resources/components/jts-backend.xml`. Its content is included below:
 
-wkt.Properties file for WKTParser and WKTGenerator
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+
+	<bean id="wktParser" class="org.n52.geoprocessing.jts.io.datahandler.parser.WKTParser" />
+	<bean id="wktGenerator" class="org.n52.geoprocessing.jts.io.datahandler.generator.WKTGenerator" />
+	<bean id="jtsConvexHullAlgorithm" class="org.n52.geoprocessing.jts.algorithm.JTSConvexHullAlgorithm" />
+
+</beans>
+```
+
+As described in [the JavaPS architecture description](../architecture/architecture.markdown#spring-bean-configuration), JavaPS makes use of [XML configuration](https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html#beans-factory-metadata) for bean declaration. The relevant part of the upper **Spring configuration file** includes three bean definitions comprising both **data handlers** (`WKTParser` and `WKTGenerator`) and the ***Algorithm*** implementation `JTSConvexHullAlgorithm`. By declaring those components of **javaps-jts-backend** as *Spring beans*, they will be automatically loaded by Spring during startup of the **JavaPS** application. Of course, this implies that **javaps-jts-backend** is *registered* within **JavaPS** as described [below](#registration-of-epr-within-javaps).
+
+Note that the **binding** implementation is not included as **Spring bean**. This is not necessary, as the components `WKTParser` and `WKTGenerator` explicitly reference it during their initialization.
+
+##### Registration of EPR within JavaPS
+
+Registration of **EPRs** like **javaps-jts-backend** may be accomplished through either one of following two ways:
+
+1.	Build **JavaPS** from the scratch with **EPR** as dependency:
+	-	Declare the stand-alone Maven **External Processing Repository** project as *dependency* within the main `pom.xml` file of **JavaPS**
+	-	build Maven project **JavaPS** with **EPR** as dependency, e.g. by executing command `mvn clean install`.
+	-	deploy the generated `WAR` file on a suitable server
+	-	check if custom ***Algorithm*** of **EPR** is available by inspecting the *Contents* section of the **Capabilities** document by calling the **GetCapabilities** operation of JavaPS.
+2.	Integrate **EPR** into a running **JavaPS** application:
+	-	package the stand-alone Maven **External Processing Repository** project as a `JAR` container
+	-	drop the `JAR` container into folder `WEB-inf/lib` of an already deployed **JavaPS** application.
+	-	shutdown and restart the **JavaPS** application. The **EPR** library should then be found and its contents be added to the **JavaPS** infrastructure.
+	-	check if custom ***Algorithm*** of **EPR** is available by inspecting the *Contents* section of the **Capabilities** document by calling the **GetCapabilities** operation of JavaPS.
 
 [Jump back to main JavaPS documentation page](../JavaPS_Documentation.markdown)
