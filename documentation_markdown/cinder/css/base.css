@@ -86,14 +86,14 @@ div.source-links {
     padding: 5px 20px;
     z-index: 1;
 }
-.bs-sidebar .nav > li > div:hover,
-.bs-sidebar .nav > li > div:focus {
+.bs-sidebar .nav > li > div a:hover,
+.bs-sidebar .nav > li > div a:focus {
     text-decoration: none;
     border-right: 1px solid;
 }
 .bs-sidebar .nav > .active > div,
-.bs-sidebar .nav > .active:hover > div,
-.bs-sidebar .nav > .active:focus > div {
+.bs-sidebar .nav > .active:hover > div a,
+.bs-sidebar .nav > .active:focus > div a {
     font-weight: bold;
     background-color: transparent;
     border-right: 1px solid;
