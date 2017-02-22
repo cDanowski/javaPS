@@ -1,40 +1,6 @@
 JavaPS Documentation - Adding new Processes/Algorithms
 ======================================================
 
-#### Table of Contents
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-- [How to add custom Processes/Algorithms to JavaPS](#how-to-add-custom-processesalgorithms-to-javaps)
-  - [Custom Algorithm Definitions through Java Annotations](#custom-algorithm-definitions-through-java-annotations)
-  - [Class Annotation **@Algorithm**](#class-annotation-algorithm)
-  - [Annotations for the Definition of *Process Inputs*](#annotations-for-the-definition-of-process-inputs)
-    - [Setter Annotation **@LiteralInput**](#setter-annotation-literalinput)
-    - [Setter Annotation **@ComplexInput**](#setter-annotation-complexinput)
-  - [Annotations for the Definition of *Process Outputs*](#annotations-for-the-definition-of-process-outputs)
-    - [Setter Annotation **@LiteralOutput**](#setter-annotation-literaloutput)
-    - [Setter Annotation **@ComplexOutput**](#setter-annotation-complexoutput)
-  - [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
-  - [Annotation **@Execute**](#annotation-execute)
-  - [Conclusion and Recommendation for an **External Processing Repository**](#conclusion-and-recommendation-for-an-external-processing-repository)
-- [Creating an External Processing Repository (EPR)](#creating-an-external-processing-repository-epr)
-  - [Introduction - What is an EPR?](#introduction---what-is-an-epr)
-  - [Benefits of using an EPR](#benefits-of-using-an-epr)
-  - [Contents of an EPR - How to write/create an EPR for JavaPS](#contents-of-an-epr---how-to-writecreate-an-epr-for-javaps)
-    - [Project Structure of exemplar "javaps-jts-backend" Algorithm Repository](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository)
-    - [Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm)
-      - [Algorithm Definition](#algorithm-definition)
-      - [Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs](#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs)
-        - [Binding](#binding)
-        - [Data Handlers - Implementations of Interface "InputOutputHandler"](#data-handlers---implementations-of-interface-inputoutputhandler)
-    - [Registration of an EPR within JavaPS via Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration)
-      - [Spring Configuration file](#spring-configuration-file)
-      - [Registration of EPR within JavaPS](#registration-of-epr-within-javaps)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 This page aims to guide developers on how to create and add new custom processes to **JavaPS**. The introduction is split into two main parts. First, the creation of [custom algorithms/processes through Java annotations](#custom-algorithm-definitions-through-java-annotations) is focused. Second, the guide provides recommendations on how to bundle custom *algorithm* definitions within a so-called [External Processing Repository (EPR)](#creating-an-external-processing-repository-epr). In general, it takes more than writing a single Java class to create a new custom *algorithm/process*, as a developer also has to include definitions of appropriate *bindings* or *data handling* components assisting in de-/encoding and processing *in-* and *output data*. Here, an **EPR** may collect all relevant Java components within a stand-alone Maven project, which is separated from JavaPS. Registration of its components is accomplished via Maven and Spring configuration, as explained in section [Registration of an EPR within JavaPS via Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration).
 
 How to add custom Processes/Algorithms to JavaPS
@@ -192,7 +158,7 @@ In general, an **EPR** adds the following components to the basic **JavaPS** WPS
 
 -	**Algorithm** definitions through annotated Java classes as described above.
 -	**Binding** implementations for de- and encoding of process *in-* and *outputs*, as described in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations).
--	**In- and Output Handlers**: Together with an associated **Binding** these handlers provide serviceable data required by the associated **algorithm/process**. This is relevant in the context of **data representation** and its **de-** and **encoding**, as indicated in the description of [handling an Execute request](../sequence_diagrams/workflow_wps_operations/workflow_wps_operations.markdown#detailed-request-handling-2). E.g., while in a WPS **Execute** request, input geometries might be encoded using *Well-Known-Text(WKT)* format, an internal **algorithm/process** within **javaps-jts-backend** may require them as proper *JTS Java objects*. Furthermore, while the process may use these *JTS inputs* to compute certain *JTS output objects*, the **Execute** response object that is returned to the client could display them as *WKT* again (to be precise, the user submits the desired in- and output format within request parameters). In conclusion, **In- and Output Handlers** combined with suitable **Binding** implementations take care of proper format transformations between different internal and external representations of process in- and outputs. Section [Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm) explains their coexistence in more detail.
+-	**In- and Output Handlers**: Together with an associated **Binding** these handlers provide serviceable data required by the associated **algorithm/process**. This is relevant in the context of **data representation** and its **de-** and **encoding**, as indicated in the description of [handling an Execute request](../sequence_diagrams/workflow_wps_operations/workflow_wps_operations.markdown#execute---detailed-request-handling). E.g., while in a WPS **Execute** request, input geometries might be encoded using *Well-Known-Text(WKT)* format, an internal **algorithm/process** within **javaps-jts-backend** may require them as proper *JTS Java objects*. Furthermore, while the process may use these *JTS inputs* to compute certain *JTS output objects*, the **Execute** response object that is returned to the client could display them as *WKT* again (to be precise, the user submits the desired in- and output format within request parameters). In conclusion, **In- and Output Handlers** combined with suitable **Binding** implementations take care of proper format transformations between different internal and external representations of process in- and outputs. Section [Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm) explains their coexistence in more detail.
 
 The presentation of the exemplar [javaps-jts-backend](https://github.com/52North/javaps-jts-backend) is divided into three parts. First, its [project structure](#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository) is shown followed by an explanation of the required [Java resources](#java-resources---exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm) and finally ends with the necessary [Maven and Spring configuration](#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration).
 

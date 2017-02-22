@@ -1,48 +1,6 @@
 JavaPS Documentation - Workflow of WPS 2.0 Operations
 =====================================================
 
-#### Table of Contents
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-- [Workflow of WPS 2.0.0 Operations](#workflow-of-wps-200-operations)
-  - [GetCapabilities](#getcapabilities)
-    - [Basic Workflow](#basic-workflow)
-    - [Request Validation](#request-validation)
-    - [Detailed Request Handling](#detailed-request-handling)
-  - [DescribeProcess](#describeprocess)
-    - [Basic Workflow](#basic-workflow-1)
-    - [Request Validation](#request-validation-1)
-    - [Detailed Request Handling](#detailed-request-handling-1)
-  - [Execute](#execute)
-    - [Basic Workflow](#basic-workflow-2)
-    - [Request Validation](#request-validation-2)
-      - [Coarse Overview of Execute Request Validation](#coarse-overview-of-execute-request-validation)
-      - [Input Validation in detail](#input-validation-in-detail)
-        - [Group Input Validation](#group-input-validation)
-        - [Reference Input Validation](#reference-input-validation)
-        - [Value Input and Format Validation](#value-input-and-format-validation)
-      - [Output Validation in detail](#output-validation-in-detail)
-      - [Cardinality Validation in detail](#cardinality-validation-in-detail)
-    - [Detailed Request Handling](#detailed-request-handling-2)
-  - [GetStatus](#getstatus)
-    - [Basic Workflow](#basic-workflow-3)
-    - [Request Validation](#request-validation-3)
-    - [Detailed Request Handling](#detailed-request-handling-3)
-  - [GetResult](#getresult)
-    - [Basic Workflow](#basic-workflow-4)
-    - [Request Validation](#request-validation-4)
-    - [Detailed Request Handling](#detailed-request-handling-4)
-  - [Dismiss](#dismiss)
-    - [Basic Workflow](#basic-workflow-5)
-    - [Request Validation](#request-validation-5)
-    - [Detailed Request Handling](#detailed-request-handling-5)
-    - [Cancelling an accepted or running Job via Dismiss - an Example from the Developer Perspective](#cancelling-an-accepted-or-running-job-via-dismiss---an-example-from-the-developer-perspective)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 Workflow of WPS 2.0.0 Operations
 --------------------------------
 
@@ -52,17 +10,17 @@ Throughout all sequence diagrams the UML sequence diagram notation is used. In a
 
 ### GetCapabilities
 
-#### Basic Workflow
+#### GetCapabilities - Basic Workflow
 
 Within the **GetCapabilities** operation the service capabilities of the WPS instance are retrieved. The subsequent diagram shows the coarse workflow between the participating system components for a **GetCapabilities GET** request. **JavaPS** uses ***KvpBinding*** to parse the request as a ***GetCapabilitiesRequest***, validates the request with the help of ***GetCapabilitiesParameterValidator*** and request handling is done by ***GetCapabilitiesHandler***. The latter returns a ***GetCapabilitiesResponse*** object including the retrieved capabilities.
 
 ![GetCapabilities Workflow coarse](UML_Diagrams/GetCapabilities_GET/GetCapabilities_coarse.png)*GetCapabilities Workflow coarse*
 
-#### Request Validation
+#### GetCapabilities - Request Validation
 
 As of January 2017 there is no validation code for *GetGapabilities* operation.
 
-#### Detailed Request Handling
+#### GetCapabilities - Detailed Request Handling
 
 To highlight the request handling workflow the subsequent diagram focuses only the *handle()* method of the ***GetCapabilitiesHandler***. To increase response time of *GetCapabilities* requests against the WPS, **Iceland** and **JavaPS** make use of a caching mechanism that holds the capabilities information within the memory for rapid access. Hereby, the capabilities information is extracted from the actual data source from time to time to keep the cached data up to date. When answering a *GetCapabilities* request, the data is directly read from the cached information and used to create the response object without accessing the actual data source.
 
@@ -83,13 +41,13 @@ The main tasks of the *GetCapabilities* request handling are:
 
 ### DescribeProcess
 
-#### Basic Workflow
+#### DescribeProcess - Basic Workflow
 
 The **DescribeProcess** Operation is used by clients to retrieve the *process description* of a certain WPS process. The subsequent diagram shows the coarse workflow between the participating system components for a **DescribeProcess GET** request. **JavaPS** uses ***KvpBinding*** to parse the request as a ***DescribeProcessRequest***, validates the request with the help of ***DescribeProcessParameterValidator*** and request handling is done by ***DescribeProcessHandler***. The latter returns a ***DescribeProcessResponse*** object including the requested *process description*.
 
 ![DescribeProcess Workflow coarse](UML_Diagrams/DescribeProcess_GET/DescribeProcess_coarse.png)*DescribeProcess Workflow coarse*
 
-#### Request Validation
+#### DescribeProcess - Request Validation
 
 Validation of a **DescribeProcess** request is done by ***DescribeProcessParameterValidator*** and visualized in the diagram at the end of this section. Basically, a request has to contain the parameter *"identifier"*. Its value might be a reference to a single identifier of the associated process or a list of references to multiple processes or it may be the word *"ALL"* to request all process descriptions from the WPS. Hence, during validation, the ***DescribeProcessRequest*** object is analyzed for the existence of the required parameter. If it does not exist or is an empty value, a ***MissingParameterValueException*** is immediately thrown. Otherwise, each individual parameter value has to be checked. Before that an empty ***CompositeOwsException*** is created, which is used to collect any *exception* that might occur when checking each *identifier value*. Validating a single *identifier value* is split in two checks. First, if the *identifier value* is a *NULL* object, then a ***MissingParameterValueException*** is added to ***CompositeOwsException***. Second, the *parameter value* must reference an existing *process* within the WPS instance. To verify this, the ***Engine*** component is asked whether it contains an associated *process description*. If not, an ***InvalidParameterValueException*** is added to ***CompositeOwsException***. Finally, as soon as each identifier has been checked, the ***CompositeOwsException*** object is analyzed. If it contains any *exception*, it is thrown as the request contained invalid or missing parameter values. If it empty, then validation was successful and the actual operation handling can be continued.
 
@@ -97,7 +55,7 @@ Validation of a **DescribeProcess** request is done by ***DescribeProcessParamet
 
 As indicated by the notes within the diagram, the upper description of the validation process have been simplified. Actually, Java Lambda expressions and ***Optional*** objects are used when creating an ***Exception*** first that are afterwards investigated to transfer any ***Exception*** to ***CompositeOwsException***. For reasons of simplicity, the sequence diagram displays these steps in a different way.
 
-#### Detailed Request Handling
+#### DescribeProcess - Detailed Request Handling
 
 The subsequent diagram highlights the request handling of the **DescribeProcess** request. Basically, the *process identifier* is extracted from the ***DescribeProcessRequest*** and used to acquire the associated *process description* as ***ProcessOffering***. **JavaPS** organises available processes as child classes of interface ***IAlgorithm***. Hence, a *process* is an ***IAlgorithm*** that has a *process description* as property and an *execute()* method to run the algorithm.
 
@@ -112,13 +70,13 @@ In more detail, the following tasks are performed:
 
 ### Execute
 
-#### Basic Workflow
+#### Execute - Basic Workflow
 
 In contrast to the previous WPS *GET* operations examples, the **Execute** operation is demonstrated using HTTP *POST* and *POX* binding. With regard to the coarse workflow, the ***PoxBinding*** component parses the request as ***ExecuteRequest*** within the *doPostOperation()* method. The request is validated by ***ExecuteParameterValidator***, which performs a lot more checks compared to all other WPS operations as explained below. After validation, the ***ExecuteHandler*** processes the request and returns an ***ExecuteResponse***. In short, a new ***Job*** instance is created that is executed synchronously or asynchronously. While in the first case (synchronous execution), the response contains the computed *result(s)*, the latter case includes a *status info* document within the response.
 
 ![Execute Workflow coarse](UML_Diagrams/Execute_POST/Execute_coarse.png)*Execute Workflow coarse*
 
-#### Request Validation
+#### Execute - Request Validation
 
 Validation of an **Execute** requires much more steps compared to all other WPS operations. An **Execute** request comprises the following parameters:
 
@@ -225,7 +183,7 @@ If any ***Exception*** has been added to ***CompositeOwsException*** during the 
 
 ![Execute Request - Validation of Input Cardinalities](UML_Diagrams/Execute_POST/validation/Execute_validation_cardinalities_detailed.png)*Execute Request - Validation of Input Cardinalities*
 
-#### Detailed Request Handling
+#### Execute - Detailed Request Handling
 
 To concretize the handling and processing of an ***ExecuteRequest***, the *handle()* method of the ***ExecuteHandler*** is inspected in more detail:
 
@@ -260,13 +218,13 @@ To complete the description of the **Execute** operation, the next diagram focus
 
 ### GetStatus
 
-#### Basic Workflow
+#### GetStatus - Basic Workflow
 
 The aim of the **GetStatus** operation is to retrieve the current *status* of the *job* with the submitted *job identifier*. The following coarse workflow diagram shows an exemplar **GetStatus GET** request. The request is parsed by ***KvpBinding*** as a ***GetStatusRequest***. Validation is performed by ***JobIdParameterValidator***, which checks whether a parameter named *jobId* exists whose value can be resolved to an existing *job identifier* within the WPS. Subsequently, the ***GetStatusHandler*** performs the actual request handling to retrieve the current *job status* and return it within a ***GetStatusResponse***.
 
 ![GetStatus Workflow coarse](UML_Diagrams/GetStatus_GET/GetStatus_coarse.png)*GetStatus Workflow coarse*
 
-#### Request Validation
+#### GetStatus - Request Validation
 
 As indicated in the lower diagram, the component ***JobIdParameterValidator*** performs validation of a **GetStatus** request object. In particular, it extracts the parameter *jobId* from the request object and checks the following conditions:
 
@@ -278,7 +236,7 @@ If any of these conditions is *true*, then a ***MissingParameterValueException**
 
 ![GetStatus Request Validation](UML_Diagrams/GetStatus_GET/GetStatus_validation.png)*GetStatus Request Validation*
 
-#### Detailed Request Handling
+#### GetStatus - Detailed Request Handling
 
 The details of the *handle()* method of the ***GetStatusHandler*** are demonstrated in the next diagram. The following sub-tasks are performed:
 
@@ -303,19 +261,19 @@ The details of the *handle()* method of the ***GetStatusHandler*** are demonstra
 
 ### GetResult
 
-#### Basic Workflow
+#### GetResult - Basic Workflow
 
 A **GetResult** operation is used to retrieve the *result(s)* of the *job* with the submitted *job identifier*. The following coarse workflow diagram shows an exemplar **GetResult GET** request. The request is parsed by ***KvpBinding*** as a ***GetResultRequest*** and validation is performed by ***JobIdParameterValidator***, which checks whether the parameter *jobId* points to an existing *job identifier* within the WPS. If so, the ***GetResultHandler*** performs the actual request handling and returns the requested *output(s)/result(s)* within a ***GetResultResponse***.
 
 ![GetResult Workflow coarse](UML_Diagrams/GetResult_GET/GetResult_coarse.png)*GetResult Workflow coarse*
 
-#### Request Validation
+#### GetResult - Request Validation
 
-Similar to the validation of a **GetStatus** request, the component ***JobIdParameterValidator*** performs validation of a **GetResult** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3)\.
+Similar to the validation of a **GetStatus** request, the component ***JobIdParameterValidator*** performs validation of a **GetResult** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#getstatus---request-validation)\.
 
 ![GetResult Request Validation](UML_Diagrams/GetResult_GET/GetResult_validation.png)*GetResult Request Validation*
 
-#### Detailed Request Handling
+#### GetResult - Detailed Request Handling
 
 Similar to the previous operation descriptions, the following diagram focuses the *handle()* method of ***GetResultHandler***. In general, the required information is stored within the associated ***Job*** object, which may or may not have been persisted. If it has not yet been persisted, the result can simply be retrieved from the associated ***Job*** instance. Otherwise, the information has to be loaded from the persisted resource and the ***Result*** object has to be constructed from the scratch. Subsequently, both cases are described in detail. The *handle()* method comprises the following sub-tasks:
 
@@ -338,19 +296,19 @@ Similar to the previous operation descriptions, the following diagram focuses th
 
 ### Dismiss
 
-#### Basic Workflow
+#### Dismiss - Basic Workflow
 
 The **Dismiss** operation is used to cancel an *accepted* or *running* **job**. A **Dismiss** GET request is parsed by ***KvpBinding*** as a ***DismissRequest***. Validation is performed by ***JobIdParameterValidator*** that checks whether a parameter named *jobId* exists and whether its value can be resolved to an existing *job identifier* within the WPS. Subsequently, the ***DismissHandler*** processes the request to cancel the specified job if possible and returns a ***DismissResponse***, which includes the jobs *Status Info* document.
 
 ![Dismiss Workflow coarse](UML_Diagrams/Dismiss_GET/Dismiss_coarse.png)*Dismiss Workflow coarse*
 
-#### Request Validation
+#### Dismiss - Request Validation
 
-Similar to the validation of a **GetStatus** and **GetResult** request, the component ***JobIdParameterValidator*** performs validation of a **Dismiss** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#request-validation-3)\.
+Similar to the validation of a **GetStatus** and **GetResult** request, the component ***JobIdParameterValidator*** performs validation of a **Dismiss** request object. Thus, the validation workflow is identical as already described in section [validation of GetStatus request](#getstatus---request-validation)\.
 
 ![Dismiss Request Validation](UML_Diagrams/Dismiss_GET/Dismiss_validation.png)*Dismiss Request Validation*
 
-#### Detailed Request Handling
+#### Dismiss - Detailed Request Handling
 
 Again, more detailed information about the sub-tasks within the *handle()* method of ***DismissHandler*** are explained in the following:
 
@@ -366,7 +324,7 @@ Again, more detailed information about the sub-tasks within the *handle()* metho
 
 Cancelling a *job* before it completes its computation is a key aspect of the **WPS specification**. As shown in the previous section, the *Dismiss* operation triggers the WPS server to *cancel()* the execution of a certain ***Job***.
 
-As explained in section [Execute - Detailed Request Handling](#detailed-request-handling-2), when a ***Job*** is submitted to the ***ExecutorService*** that manages process/algorithm execution, a ***Future*** object is created and added as ***Cancelable*** to the ***Engines*** property *engine.cancelers*. A ***Future*** object comprises the method *cancel()*, which prevents the ***Future*** from executing if not already run or interrupts it if currently running. To be precise, if the execution has not started yet, a call to the *cancel()* method prevents the process from starting at all. When the process is already being executed, the *cancel()* method interrupts the thread, in which the ***Future*** is executed (compare [Oracle Java Doc of Future](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html#cancel(boolean))). However, interrupting the thread **does not stop the execution directly**. Instead the developer of the process/algorithm code explicitly has to consider the **interrupt state** and check it manually in order to abort the execution.
+As explained in section [Execute - Detailed Request Handling](#execute---detailed-request-handling), when a ***Job*** is submitted to the ***ExecutorService*** that manages process/algorithm execution, a ***Future*** object is created and added as ***Cancelable*** to the ***Engines*** property *engine.cancelers*. A ***Future*** object comprises the method *cancel()*, which prevents the ***Future*** from executing if not already run or interrupts it if currently running. To be precise, if the execution has not started yet, a call to the *cancel()* method prevents the process from starting at all. When the process is already being executed, the *cancel()* method interrupts the thread, in which the ***Future*** is executed (compare [Oracle Java Doc of Future](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html#cancel(boolean))). However, interrupting the thread **does not stop the execution directly**. Instead the developer of the process/algorithm code explicitly has to consider the **interrupt state** and check it manually in order to abort the execution.
 
 E.g. the following Java code shows an example of an execute method that computes buffer geometries for a list of input geometries. Note that the definition of an ***Algorithm*** for **JavaPS** is explained in section [How to add new Processes/Algorithms](../../algorithm_definition/algorithm_definition.markdown) and thus not explained here. What is important to know is that in- and outputs of an ***Algorithm*** are stored as Java properties of the implementing class. Within a method annotated by ***@Execute*** the computation that is called when executing the associated ***Job*** is implemented. The code below only shows that method. The computation of all the buffer geometries is done within a for-loop that iterates over all input geometries. Within each iteration, the condition `if (Thread.currentThread().isInterrupted())` is called to check whether the thread has been interrupted. If so, then the computation should be aborted, e.g. by the simple statement `return`.
 

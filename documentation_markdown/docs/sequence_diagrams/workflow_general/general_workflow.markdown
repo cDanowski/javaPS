@@ -5,27 +5,6 @@ In order to better understand the dynamic relationships between the participatin
 
 Throughout all sequence diagrams the UML sequence diagram notation is used. In addition, the colours (*blue* and *red*) of the participating application components indicate their membership within either **JavaPS** or **Iceland**. While *blue* components belong to **Iceland**, *red* components are offered by **JavaPS**.
 
-#### Table of Contents
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-- [General Workflow (abstract Request to Response)](#general-workflow-abstract-request-to-response)
-  - [Overview from Request to Response](#overview-from-request-to-response)
-  - [Iceland Service Events throughout Operations](#iceland-service-events-throughout-operations)
-  - [Identification of Binding in detail](#identification-of-binding-in-detail)
-    - [Generic Workflow - Binding](#generic-workflow---binding)
-    - [KVP Binding Example for GET Request](#kvp-binding-example-for-get-request)
-    - [POX Binding Example for POST Request](#pox-binding-example-for-post-request)
-  - [Parsing of a Request in detail](#parsing-of-a-request-in-detail)
-    - [Generic Workflow - Parse Request](#generic-workflow---parse-request)
-    - [Capabilities GET Example](#capabilities-get-example)
-    - [Execute POST Example with POX Binding](#execute-post-example-with-pox-binding)
-  - [Identification of OperationHandler in detail](#identification-of-operationhandler-in-detail)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 General Workflow (abstract Request to Response)
 -----------------------------------------------
 

@@ -1,17 +1,6 @@
 JavaPS Documentation
 ====================
 
-#### Table of Contents
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-- [General Information](#general-information)
-- [Links to Subpages of the Documentation](#links-to-subpages-of-the-documentation)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 This documentation guide provides helpful information about the **JavaPS** Java project, developed by **52°North**. This documentation is based on the project state from December 2016. The most current development of **JavaPS** is available from the [official GitHub repository](https://github.com/52North/javaps).
 
 General Information
