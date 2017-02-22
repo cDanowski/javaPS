@@ -17,12 +17,19 @@ ul.nav li.third-level {
     padding-left: 12px;
 }
 
+ul.nav li.fourth-level {
+    padding-left: 0px;
+    z-index: 1;
+}
+
 div.col-md-3 {
     padding-left: 0;
 }
 
 div.col-md-9 {
     padding-bottom: 100px;
+    position:static !important;
+    z-index: 0;
 }
 
 div.source-links {
@@ -68,6 +75,25 @@ div.source-links {
 .bs-sidebar .nav > .active > a,
 .bs-sidebar .nav > .active:hover > a,
 .bs-sidebar .nav > .active:focus > a {
+    font-weight: bold;
+    background-color: transparent;
+    border-right: 1px solid;
+}
+
+/* CUSTOM ADDITION FOR DIV CONTAINER */
+.bs-sidebar .nav > li > div {
+    display: block;
+    padding: 5px 20px;
+    z-index: 1;
+}
+.bs-sidebar .nav > li > div a:hover,
+.bs-sidebar .nav > li > div a:focus {
+    text-decoration: none;
+    border-right: 1px solid;
+}
+.bs-sidebar .nav > .active > div,
+.bs-sidebar .nav > .active:hover > div a,
+.bs-sidebar .nav > .active:focus > div a {
     font-weight: bold;
     background-color: transparent;
     border-right: 1px solid;
