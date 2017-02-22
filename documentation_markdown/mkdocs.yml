@@ -8,5 +8,5 @@ pages:
         - Generic Workflow Descriptions: sequence_diagrams/workflow_general/general_workflow.markdown
         - Workflow Descriptions of WPS Operations: sequence_diagrams/workflow_wps_operations/workflow_wps_operations.markdown
     - Guide for Creation of custom Algorithms/Processes: algorithm_definition/algorithm_definition.markdown
-theme: cinder
+theme_dir: cinder
 repo_url: https://github.com/52North/javaPS
